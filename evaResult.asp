@@ -1,0 +1,114 @@
+ï»¿<!DOCTYPE html>
+<html>
+<head>
+    <title>Hi There</title>
+	<meta charset="utf-8" />
+	<!-- <link rel="stylesheet" href="/w3.css"> -->
+<style>
+
+</style>
+
+<!--JQuery source used-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+
+</head>
+
+
+<body>
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+	<style>
+		table, td, th {
+			border: 1px solid black;
+		}
+
+		table {
+			border-collapse: collapse;
+			width: 100%;
+		}
+
+		th {
+			height: 50px; vertical-align:center;text-align:left;
+		}
+		td {vertical-align:center;text-align:center;}
+
+	</style>
+</head>
+<body>
+
+<p>.</p>
+
+<!--<table class="editabletable"> -->
+<table >
+  <tr>
+  <td colspan="7">
+     ¸ÊËà·Ö¹«Ë¾ÄÚ¿Ø·çÏÕ×Ô²é±í
+  </td>
+  </tr>
+  <tr>
+    <th>ÏµÁĞ</th>
+    <td>·ÖÀà</td>
+    <td>ÏêÏ¸·çÏÕµã</td>
+    <td>ºÏ¹æÒªÇó</td>
+    <td>ÅÅ²é·½·¨</td>
+    <td>ÅÅ²é¾­¹ı</td>
+    <td>ÊÇ·ñ·¢ÏÖÎÊÌâ</td>
+  </tr>
+
+  <tr>
+	<td rowspan="6" > ¸öÏÕ </td>
+	<td rowspan="6" > Èë¡¢ÀëË¾×ÊÁÏ²»ºÏ¹æ </td>
+  </tr>
+  
+  <tr>  
+       <td >ÏêÏ¸·çÏÕµãÒ»</td>
+       <td >ºÏ¹æÒªÇóÒ»</td>
+	   <td rowspan="5" >°´ÕÕÏà¹ØÖÆ¶ÈÒªÇóÖğÒ»ÅÅ²éÒµÎñÈËÔ±ÈëË¾µµ°¸£¬ÒªÇóÉÏ±¨×ÊÁÏÊÇ·ñÆëÈ«£¬Ç©×ÖÊÇ·ñÆëÈ«£¬ÊÇ·ñºËÊµÈıÎŞÈËÔ±µÄ¾ßÌåÇé¿ö£¬ºË²éÏµÍ³ÉÏ¸ÚÈËÔ±ÊÇ·ñ³ÖÓĞÖ´ÒµÖ¤£¬Ö´ÒµÖ¤ÉêÇëÊ±¼äÊÇ·ñÔÚÈëË¾Ö®Ç°¡£</td>
+	   <!-- <td contenteditable></td>   Ìø¹ıÅÅ²é·½·¨--> 
+	   <td  contenteditable>ÅÅ²é¾­¹ıÒ»</td> 
+	   <td contenteditable>ÊÇ·ñ·¢ÏÖÎÊÌâÒ»</td> 
+  </tr>
+  
+  <tr>  
+     <td contenteditable>ÏêÏ¸·çÏÕµã¶ş</td>  
+	 <td contenteditable>ºÏ¹æÒªÇó¶ş</td>
+     <!-- <td contenteditable></td>   Ìø¹ıÅÅ²é·½·¨--> 
+	 <td  contenteditable>ÅÅ²é¾­¹ı¶ş</td> 
+	 <td contenteditable>ÊÇ·ñ·¢ÏÖÎÊÌâ¶ş</td> 
+  </tr>
+  <tr> 
+     <td contenteditable>ÏêÏ¸·çÏÕµãÈı</td>  
+	 <td contenteditable>ºÏ¹æÒªÇóÈı</td>
+     <!-- <td contenteditable></td>   Ìø¹ıÅÅ²é·½·¨--> 
+	 <td  contenteditable>ÅÅ²é¾­¹ıÈı</td> 
+	 <td contenteditable>ÊÇ·ñ·¢ÏÖÎÊÌâÈı</td> 
+  </tr>
+  <tr> 
+     <td contenteditable>ÏêÏ¸·çÏÕµãËÄ</td>  
+	 <td contenteditable>ºÏ¹æÒªÇóËÄ</td>
+     <!-- <td contenteditable></td>   Ìø¹ıÅÅ²é·½·¨--> 
+	 <td  contenteditable>ÅÅ²é¾­¹ıËÄ</td> 
+	 <td contenteditable>ÊÇ·ñ·¢ÏÖÎÊÌâËÄ</td> 
+  </tr>
+</table>
+
+
+
+<div id="checkPointArea">
+<button type="button" onclick="loadDoc()">Change Content</button>
+</div>
+<textarea id=textarea  rows="4" cols="50">
+At w3schools.com you will learn how to make a website. We offer free tutorials in all web development technologies.
+</textarea>
+
+
+
+</body>
+
+
+</html>
