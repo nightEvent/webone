@@ -186,7 +186,7 @@ function post(url, params, method,navigateToUrl,newUrl){
 		   elementCount = elementCount + 1;
 		 }
 	}
-	if ( navigateToUrl == "N" ) { //Not navigate to the url, so navigate to newUrl
+	if ( navigateToUrl == "N" ) { //Not navigate to the  url, so navigate to newUrl
 		var http = new XMLHttpRequest();
 		http.open("POST", url, true);
 		//Send the proper header information along with the request

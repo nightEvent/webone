@@ -54,9 +54,6 @@ objConn.Open(sConnection)
 'getting record user previously input
 Dim procedureList, arr(),arrCB(),ind,cnt,cntCB,loadInputHistory
 procedureList=Request.Form("procedureList")
-issueList=Request.Form("issueList")
-
-response.write "<p  id=""issueList"" hidden>" & issueList & "</p>"
 
 delimiter = Chr(31)
 ind=0
@@ -93,16 +90,15 @@ End If
 
 
 'preparing search result buttons
-Dim topHead, secondH, sqlCount,count,startCheck, buttonSubmit,buttonBack
-topHeader=" <tr> <td colspan=""6""> 当前已添加在分类的项目  </td> </tr> "
-secondH=" <tr> <th>系列</th> <th>分类</th> <th>详细风险点</th>  <th>合规要求</th>  <th>排查方法</th> <th>勾选要删除的项</th>  </tr> "
+Dim topHead, secondH, sqlCount,count, buttonSubmit,buttonBack
+topHeader=" <tr> <td colspan=""7""> 当前已添加在分类的项目  </td> </tr> "
+secondH=" <tr> <th>系列</th> <th>分类</th> <th>详细风险点</th>  <th>合规要求</th>  <th>排查方法</th> <th style=""display:none;"" > 排查过程</th>  <th>勾选要删除的项</th>  </tr> "
 sqlCount="select count(1) as checkPointCnt from webone.checkpoints where checkpoint_type = '" & checkPointType & "' and sub_cat_id = " & subCat & " ;"
 Set objRS = objConn.Execute(sqlCount)
 while Not objRs.EOF
 	count=objRs.fields("checkPointCnt")
 	objRS.MoveNext
 wend
-startCheck="<button onclick=""startChecking()""> 排查开始 </button>"
 buttonSubmit="<button onclick=""startChecking()""> 删除选定的风险点 </button>"
 buttonBack="<button onclick=""buttonBack()""> 返回添加风险点页面 </button>"
 Response.Write "<table id=""selfEvaSheet"" >"
@@ -117,10 +113,12 @@ IF checkPointsCount=1 Then
 	Response.Write "<td rowspan="""      & count & """  >"  & objRS.Fields("sub_cat_name") &  "</td>  "
 	Response.Write "  <td>" &  " <a href=""#"" onmouseenter=""checkPointClicked(" & objRS.Fields("checkpoint_id") & ")"" >"  &  objRS.Fields("checkpoint") &  "</a> "  &   "</td>  <td   > " & objRS.Fields("fulfill_standard") & "</td> "
 	Response.Write "<td rowspan=""" & count & """ >"  & objRS.Fields("audit_rule") & "</td>"
+	Response.Write "<td  style=""display:none;""> 排查过程 </td>"
 	Response.Write "<td >  <input type=""checkbox""  id=""" & checkPointsCount &  "000"" name=""vehicle"" value=""Car"" unchecked >  </td>   <td style=""display:none;"">" & objRS.Fields("sub_cat_id") & "</td> <td style=""display:none;"">" & objRS.Fields("checkpoint_id") & "</td> </tr>"
 End If
 IF checkPointsCount>1 Then
 	Response.Write "<tr> <td >" &  " <a href=""#"" onmouseenter=""checkPointClicked(" & objRS.Fields("checkpoint_id") & ")"" >"  &  objRS.Fields("checkpoint") &  "</a> "  &  "</td>  <td   > " & objRS.Fields("fulfill_standard") & "</td> "
+	Response.Write "<td  style=""display:none;""> 排查过程 </td>"
 	Response.Write "<td >  <input type=""checkbox""  id=""" & checkPointsCount &  "000"" name=""vehicle"" value=""Car"" unchecked >  </td>   <td style=""display:none;"">" & objRS.Fields("sub_cat_id") & "</td> <td style=""display:none;"">" & objRS.Fields("checkpoint_id") & "</td> </tr>"
 End If
 checkPointsCount=checkPointsCount+1
@@ -128,7 +126,6 @@ objRS.MoveNext
 Wend
 Response.Write "</table>"
 Response.Write "<br>"
-'Response.Write startCheck 
 Response.Write buttonBack
 Response.Write " "
 Response.Write buttonSubmit
@@ -298,49 +295,19 @@ function startChecking(){
 	var audit_procedures = createArray(checkPointsCount, 4 ); 
 	getCellValues(audit_procedures,table);
 	//printArrays(audit_procedures);
-	//var checkPointsIdlistValue = getInlist(audit_procedures);
-    var issueListValue = document.getElementById('issueList').innerHTML;
-	var parameters = {
-	  checkPointIdList: getInlist(audit_procedures),
-	  procedureList: procedureListBuilder(audit_procedures),   //not required
-	  issueList: issueListValue
-	}
-
-
-	for (var name in parameters) {
-	  if (parameters.hasOwnProperty(name)) {
-		console.log('this is fog (' + name + ') for sure. Value: ' + parameters[name]);
-	  }
-	  else {
-		console.log(name); // toString or something else
-	  }
-	}
-	post("issueTrackerBuilder.asp",parameters)
-	//navigateToIssueTracker(checkPointsInlist);
-}
-
-function post(path, params, method) {
-    method = method || "post"; // Set method to post by default if not specified.
-
-    // The rest of this code assumes you are not using a library.
-    // It can be made less wordy if you use one.
-    var form = document.createElement("form");
-    form.setAttribute("method", method);
-    form.setAttribute("action", path);
-	
-    for(var key in params) {
-        if(params.hasOwnProperty(key)) {
-            var hiddenField = document.createElement("input");
-            hiddenField.setAttribute("type", "hidden");
-            hiddenField.setAttribute("name", key);
-            hiddenField.setAttribute("value", params[key]);
-			  console.log('this is params (' + key + ') for sure. Value: ' + params[key]); 
-            form.appendChild(hiddenField);
-         }
-    }
-
-    document.body.appendChild(form);
-    form.submit();
+	var parameters = "checkPointIdList=" + getInlist(audit_procedures);
+	console.log(parameters)
+	var http = new XMLHttpRequest();
+	http.open("POST", "deleteCheckPoints.asp", true);
+	http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	http.onreadystatechange = function(){
+	if(http.readyState == 4 && http.status == 200){
+		   alert(http.responseText);
+		   location.reload(true);
+		   //navigates(document.referrer)
+		 }
+	   }
+	http.send(parameters)
 }
 
 function navigates(navigateTo){
