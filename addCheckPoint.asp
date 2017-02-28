@@ -13,7 +13,7 @@ a.homeLink:hover,a.homeLink.active{
 <!--JQuery source used-->
 <script src="lib/jquery.min.js"></script>
 </head>
-<a class="homeLink" href="http://localhost:88/home.asp">Home</a> <br> <br>
+<a class="homeLink" href="home.asp">Home</a> &nbsp  &nbsp <a class="homeLink" href=" admin.asp">返回系统管理页面</a> <br> <br>  
 <body background="images/homeBackground.jpg" >
 <%
 Dim checkPointType
