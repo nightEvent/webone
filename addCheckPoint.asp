@@ -15,7 +15,11 @@ a.homeLink:hover,a.homeLink.active{
 </head>
 <a class="homeLink" href="http://localhost:88/home.asp">Home</a> <br> <br>
 <body background="images/homeBackground.jpg" >
-<div id='adminPageData' data_checkpoint_type='L' subCatId-chosen='99999999' auditRule-changed='N'></div>
+<%
+Dim checkPointType
+checkPointType = Request.QueryString("checkPointType")
+response.write "<div id=""adminPageData"" data_checkpoint_type=""" & checkPointType & """ auditRule-changed=""N""></div>"
+%>
 <label>系列</label> <br>
 
 <select id="setSelected" name="系列" onchange="populateSubCat()" autofocus>
@@ -112,7 +116,7 @@ function auditRuleChanged(){
 	adminPageData.setAttribute('auditRule-changed','Y');
 }
 function loadAuditRule(){
-	var url 			= "adminReturns.asp";
+	var url 			= "checkPointReturns.asp";
 	var subCatSelected  = document.getElementById("subCatSelected");
 	var subCatID		= subCatSelected.options[ subCatSelected.selectedIndex ].value;
 	//you found it's already selected then your responsibility to store it in global pool for sumbmission reference
@@ -147,7 +151,7 @@ function loadAuditRule(){
 	http.send(Params);
 }
 function populateSubCat(){
-	var url 			= "adminReturns.asp";
+	var url 			= "checkPointReturns.asp";
 	var setSelected 	= document.getElementById("setSelected");
 	var setID           = setSelected.options[ setSelected.selectedIndex ].value;
 	var adminPageData 	= document.getElementById("adminPageData");

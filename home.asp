@@ -1,9 +1,11 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <title>太平人寿风险排查系统</title>
-	<meta charset="utf-8" />
-	<!-- <link rel="stylesheet" href="/w3.css"> -->
+<title>太平人寿风险排查系统</title>
+<meta charset="utf-8" />
+<!-- <link rel="stylesheet" href="/w3.css"> -->
+<link rel="shortcut icon" href="favicon.ico" >
+<link rel="icon" type="image/gif" href="animated_favicon1.gif">
 <style>
 
 body {
@@ -337,8 +339,8 @@ else
 end if
 
 if wrongPassWord = "Y" then
-'response.write "<script> alert(""密码错误，请重新登陆！"")  <script/> "
-response.write "<p style=""color:red;"">密码错误，请重新登陆！</p>"
+'response.write "<script> alert(""账号或密码错误，请重新登陆！"")  <script/> "
+response.write "<p style=""color:red;"">账号或密码错误，请重新登陆！</p>"
 end if
 
 
