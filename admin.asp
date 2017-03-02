@@ -57,7 +57,7 @@ li.dropdown {
 <body >
 
 <ul>
-  <li><a href="home.asp">Home</a></li>
+  <li><a href="home.asp">主页</a></li>
   <li class="dropdown">
     <a href="#" class="dropbtn">风险点添加</a>
     <div class="dropdown-content">

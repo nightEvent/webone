@@ -41,6 +41,9 @@ Session.Timeout=1440
 Dim subCat,checkPointType,sConnection, objConn , objRS ,headerRow, queryStr 
 subCat 			= Request.querystring("subCatID")
 checkPointType	= Request.querystring("checkPointType")
+
+response.write "<div id=""currentPageData"" data_checkpoint_type=""" & checkPointType & """ ></div>"
+
 queryStr="SELECT CONVERT(sub_cat_id USING utf8) sub_cat_id, set_name , sub_cat_name , checkpoint , fulfill_standard, audit_rule,checkpoint_id FROM webone.selfEva where 1= 1  "
 queryStr=queryStr & " AND checkpoint_type = '" & checkPointType & "' "
 queryStr=queryStr & " AND sub_cat_id  = " & "'" & subCat & "'"  & " order by  checkpoint_id ASC ;"
@@ -320,7 +323,9 @@ navigates("home.asp")
 }
 
 function buttonBack(){
-navigates("addCheckPoint.asp")
+var currentPageData 	= document.getElementById("currentPageData");
+var checkPointType  	= currentPageData.getAttribute('data_checkpoint_type');
+navigates("addCheckPoint.asp?checkPointType="+checkPointType)
 }
 </script>
 
