@@ -7,6 +7,85 @@
 <link rel="shortcut icon" href="favicon.ico" >
 <link rel="icon" type="image/gif" href="animated_favicon1.gif">
 <style>
+<!-- new implementation starts -->
+ul.ruleul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;   !important
+}
+
+li {
+    float: left;
+}
+
+li a, .dropbtn {
+    display: inline-block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li a:hover, .dropdown:hover .dropbtn {
+    background-color: red;
+}
+
+li.dropdown {
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+}
+
+.dropdown-content a:hover {background-color: #f1f1f1}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+<!-- new implementation ends -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 body {
     font-family: "Lato", sans-serif;
@@ -265,8 +344,8 @@ p.big {
 </head>
 
 
-<body background="images/homeBackground.jpg" >
-
+<!-- <body background="images/homeBackground.jpg" >  -->
+<body >
 <div id="mySidenav" class="sidenav">
   <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
   <a href="PDFs/fanxiqian.pdf">法律法规</a>
@@ -353,9 +432,48 @@ end if
 <h4>TAIPING LIFE INSURANCE CO.,LTD.GANSU BRANCH</h4>
 <hr />​
 </div>
+
 <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; 菜单 </span>   
 <br>
 </div>
+
+
+<ul >
+  <li class="dropdown">
+    <a href="#" class="dropbtn">法规制度</a>
+    <div class="dropdown-content">
+		<a href="PDFs/fanxiqian.pdf">法律法规</a>
+		<a href="PDFs/regulations.pdf">制度规定</a>
+    </div>
+  </li>
+  <li class="dropdown">
+    <a href="#" class="dropbtn">风险防范</a>
+    <div class="dropdown-content">
+		<a href="#" onclick=checkPointClicked("selfEva") >风险点自查</a>
+		<a href="#" onclick=checkPointClicked("selfEva") >全面风险排查</a>
+		<a href="#" onclick=checkPointClicked("selfEva") >临时风险排查</a>
+    </div>
+  </li>
+  <li class="dropdown">
+    <a href="#" class="dropbtn">报告</a>
+    <div class="dropdown-content">
+		<a href="#" onclick=checkPointClicked("report") >自查报告</a>
+		<a href="#" onclick=checkPointClicked("report") >全面风险排查报告</a>
+		<a href="#" onclick=checkPointClicked("report") >临时风险排查报告</a>
+    </div>
+  </li>
+  <li class="dropdown">
+    <a href="#" class="dropbtn">系统管理</a>
+    <div class="dropdown-content">
+      <a href="addCheckPoint.asp?checkPointType=Q">全面风险点</a>
+      <a href="addCheckPoint.asp?checkPointType=Z">自查风险点</a>
+      <a href="addCheckPoint.asp?checkPointType=L">临时风险点</a>
+	  <a href="passwordResetPg.asp">修改密码</a>
+    </div>
+  </li>
+</ul>
+
+
 </br>
 </br>
 </br>
