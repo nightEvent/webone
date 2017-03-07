@@ -59,27 +59,30 @@ a.homeLink:hover,a.homeLink.active{
 .axis--x path {
   display: none;
 }
-
-
 </style>
 </header>
 
 <body  background="images/singleCatSheet.jpg">
 <a class="homeLink" href="http://localhost:88/home.asp">Home</a>
 <br>
-<h2>系列</h2> 
-
+<h2>系列</h2>
 <%
 Session.Timeout=60
 response.expires=-1
-Dim sConnection, objConn , objRS ,headerRow, queryStr, hostname,setName,navType
+Response.CharSet = "utf-8"
+Dim sConnection, objConn , objRS ,headerRow, queryStr, hostname,setName,reqType,chkType
 hostname="localhost:88"
 setName=Session("setName")
-navType=Request.querystring("navType")
+reqType=Request.querystring("reqType")
+chkType=Request.querystring("chkType")
 if setName = "管理员" then
-queryStr="SELECT distinct sub_cat_id, set_name,sub_cat_name FROM webone.subCatNav where 1= 1 ;"
+queryStr="SELECT distinct sub_cat_id, set_name,sub_cat_name FROM webone.subCatNav where 1= 1 " & _
+         " AND  chk_Type = '" &  chkType & "' ;"
 else
-queryStr="SELECT distinct sub_cat_id, set_name,sub_cat_name FROM webone.subCatNav where 1= 1  and set_name = """  & setName & """ ;"
+'queryStr="SELECT distinct sub_cat_id, set_name,sub_cat_name FROM webone.subCatNav where 1= 1  and set_name = """  & setName & """ ;"
+queryStr="SELECT distinct sub_cat_id, set_name,sub_cat_name FROM webone.subCatNav where 1= 1  " & _ 
+         " AND set_name = """  & setName & """"  & _
+         " AND chk_Type ='" & chkType & "' ;"
 end if
 
 sConnection = "DRIVER={MySQL ODBC 5.3 ANSI Driver}; SERVER=localhost; DATABASE=webone; UID=weboneuser;PASSWORD=weboneuser;PTION=3" 
@@ -98,10 +101,10 @@ if current_set  <> previous_set then
  end if
   Response.Write " <details>   <summary> " & current_set & "</summary>"
 end if
-if navType = "selfEva" then
-Response.Write " <a href=""" & "singleCatSheet.asp?subCat=" & objRS.Fields("sub_cat_id") & """>" & objRS.Fields("sub_cat_name")  & "</a> <br>"  
+if reqType = "selfEva" then
+Response.Write " <a href=""" & "singleCatSheet.asp?subCatId=" & objRS.Fields("sub_cat_id") & """>" & objRS.Fields("sub_cat_name")  & "</a> <br>"  
 else
-Response.Write " <a href=""" & "issueReport.asp?subCat=" & objRS.Fields("sub_cat_id") & """>" & objRS.Fields("sub_cat_name")  & "</a> <br>"  
+Response.Write " <a href=""" & "issueReport.asp?subCatId=" & objRS.Fields("sub_cat_id") & """>" & objRS.Fields("sub_cat_name")  & "</a> <br>"  
 end if
 previous_set = current_set
 index=index+1
@@ -113,13 +116,13 @@ Set objRS = Nothing
 objConn.Close
 Set objConn = Nothing
 Response.Write "</br>"
-if navType <> "selfEva" and setName <> "" then  'setName <> "" is to avoid session expire
+if reqType <> "selfEva" and setName <> "" then  'setName <> "" is to avoid session expire
 Response.Write "<a class=""hoverEff""  href=""downloadExport.asp"">生成表格并下载</a>"
 Response.Write "</br>"
 Response.Write "<a class=""hoverEff"" href=""docReportBuilder.asp"">生成报告并下载</a>"
 Response.Write "</br>"
 Response.Write "<a class=""hoverEff""  href=""#"" onclick=""buildBarChart()"">2016违规比例</a>"
-
+Response.Write "<a class=""hoverEff""  href=""createMultipleSheetsTest.asp"" >多表Excel下载</a>"
 end if
 %>
 

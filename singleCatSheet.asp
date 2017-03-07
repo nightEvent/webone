@@ -7,8 +7,8 @@ session.codepage=65001
 %>
 
 <head>
-<title>hello..</title>
-
+<title>风险点排查</title>
+<link rel="icon" href="images/favicon.ico" type="image/x-icon">
 
 	<style>
 		a, u {
@@ -38,13 +38,13 @@ session.codepage=65001
 <%
 response.expires=-1
 Session.Timeout=1440
-Dim subCat,checkPointType,sConnection, objConn , objRS ,headerRow, queryStr 
-subCat 			= Request.querystring("subCat")
+Dim subCatId,checkPointType,sConnection, objConn , objRS ,headerRow, queryStr 
+subCatId 			= Request.querystring("subCatId")
 checkPointType	= "Z"
 
 queryStr="SELECT CONVERT(sub_cat_id USING utf8) sub_cat_id, set_name , sub_cat_name , checkpoint , fulfill_standard, audit_rule,checkpoint_id FROM webone.selfEva where 1= 1  "
 queryStr=queryStr & " AND checkpoint_type = '" & checkPointType & "' "
-queryStr=queryStr & " AND sub_cat_id  = " & "'" & subCat & "'"  & " order by  checkpoint_id ASC ;"
+queryStr=queryStr & " AND sub_cat_id  = " & "'" & subCatId & "'"  & " order by  checkpoint_id ASC ;"
 sConnection = "DRIVER={MySQL ODBC 5.3 ANSI Driver}; SERVER=localhost; DATABASE=webone; UID=weboneuser;PASSWORD=weboneuser;PTION=3"
 Set objConn = Server.CreateObject("ADODB.Connection") 
 objConn.Open(sConnection) 
@@ -93,7 +93,7 @@ End If
 
 'preparing search result buttons
 Dim topHead, secondH,sqlCount, count,startCheck, buttonSubmit,buttonBack
-sqlCount="select count(1) as checkPointCnt from webone.checkpoints where checkpoint_type = '" & checkPointType & "' and sub_cat_id = " & subCat & " ;"
+sqlCount="select count(1) as checkPointCnt from webone.checkpoints where checkpoint_type = '" & checkPointType & "' and sub_cat_id = " & subCatId & " ;"
 Set objRS = objConn.Execute(sqlCount)
 while Not objRs.EOF
 	count=objRs.fields("checkPointCnt")
