@@ -1,114 +1,182 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <title>太平人寿风险排查系统</title>
+    <title>添加风险点</title>
+	<link rel="icon" href="images/favicon.ico" type="image/x-icon">
 	<meta charset="utf-8" />
 	<!-- <link rel="stylesheet" href="/w3.css"> -->
 <style>
-
 a.homeLink:hover,a.homeLink.active{
   text-decoration: underline;
+}
+
+.hiding {
+	visibility: hidden;
+}
+
+.displaying {
+	visibility: visible;
 }
 </style>
 <!--JQuery source used-->
 <script src="lib/jquery.min.js"></script>
 </head>
-<a class="homeLink" href="home.asp">Home</a> &nbsp  &nbsp <a class="homeLink" href=" admin.asp">返回系统管理页面</a> <br> <br>  
-<body background="images/homeBackground.jpg" >
-<%
-Dim checkPointType
-checkPointType = Request.QueryString("checkPointType")
-response.write "<div id=""adminPageData"" data_checkpoint_type=""" & checkPointType & """ auditRule-changed=""N""></div>"
-%>
-<label>系列</label> <br>
 
-<select id="setSelected" name="系列" onchange="populateSubCat()" autofocus>
-<option value="XX" style="display:none;"></option>
-	<%
-		Dim sConnection, objConn , objRS ,headerRow, queryStr, hostname
-		queryStr=" select set_id, set_name from webone.sets ;"
-		sConnection = "DRIVER={MySQL ODBC 5.3 ANSI Driver}; SERVER=localhost; DATABASE=webone; UID=weboneuser;PASSWORD=weboneuser;PTION=3" 
-		Set objConn = Server.CreateObject("ADODB.Connection") 
-		objConn.Open(sConnection) 
-		Set objRS = objConn.Execute(queryStr)
-		While Not objRS.EOF
-	%>
-		<option value="<%=objRS.Fields("set_id")%>"><%=objRS.Fields("set_name")%></option>
-	<%
-		objRS.MoveNext
-		Wend
-		objRS.Close
-		Set objRS = Nothing
-		objConn.Close
-		Set objConn = Nothing
-	%>
-</select>
 
+<body >
+<a class="homeLink" href="home.asp">Home</a> <br> <br>
+<!-- <body background="images/homeBackground.jpg" > -->
+
+<label>选择添加类型:</label>
+<br>
+<input id="chckTypeZ" type="radio" onclick="chckTypeChanged('Z')" name="chckType" value="Z" checked> 自查
+<input id="chckTypeL" type="radio" onclick="chckTypeChanged('L')" name="chckType" value="L"> 临时性检查
+<input id="chckTypeQ" type="radio" onclick="chckTypeChanged('Q')" name="chckType" value="Q"> 全面排查
+<br>
+
+<div id="adminPageData" data_checkpoint_type="Z" auditRule-changed="N"></div>
+
+<br>
+<div id="set" class="displaying">
+	<label id="setLabel" >系列:</label> <br>
+	<select id="setSelected" name="系列" onchange="populateSubCat()" autofocus>
+		<option value="setNotSelected" style="display:none;"></option>
+		<%
+			Dim sConnection, objConn , objRS ,headerRow, queryStr, hostname
+			queryStr=" select set_id, set_name from webone.sets ;"
+			sConnection = "DRIVER={MySQL ODBC 5.3 ANSI Driver}; SERVER=localhost; DATABASE=webone; UID=weboneuser;PASSWORD=weboneuser;PTION=3" 
+			Set objConn = Server.CreateObject("ADODB.Connection") 
+			objConn.Open(sConnection) 
+			Set objRS = objConn.Execute(queryStr)
+			While Not objRS.EOF
+		%>
+			<option value="<%=objRS.Fields("set_id")%>"><%=objRS.Fields("set_name")%></option>
+		<%
+			objRS.MoveNext
+			Wend
+			objRS.Close
+			Set objRS = Nothing
+			objConn.Close
+			Set objConn = Nothing
+		%>
+	</select>
+</div>
 &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
 <br>
-<br>
-<lable>分类</label> &nbsp 
-<div id = "subCatDiv">
-<select id="subCatSelected">
-<option></option>
-</select>
-</div> <br><br>
-
-<lable>排查方法：</label> &nbsp 
-<div id = "auditRuleDiv">
-<textarea id="auditRule" rows="10" cols="60" onfocus="focusDetection(this)"></textarea>
+<label id="subCatLabel" class="displaying">分类:</label> 
+<div id = "subCatDiv" class="displaying">
+	<select id="subCatSelected">
+	<option></option>
+	</select>
+</div> <br>
+<div id="auditRuleLabelDiv">
+	<label id="auditRuleLabel"  class="displaying">排查方法：</label> 
 </div>
-<br>
-<form action="saveCheckPoints.asp" method="post" id="checkPointForm">
-  详细风险点： <br> <textarea id="checkPointContent" name="checkPointName" onfocus="focusDetection(this)" rows="10" cols="60" form="checkPointForm">请在这个输入框中添加详细风险点...</textarea>
-  <br> 
-  合规要求：<br> <textarea id="checkPointFulfillStandard" name="fulfillStandard" onfocus="focusDetection(this)" rows="10" cols="60" form="checkPointForm" >请在这个输入框中添加合规要求...</textarea>
-  <br>
-</form>
-<button onclick="submitWork()">提交</button>
+<div id = "auditRuleDiv" class="displaying">
+	<textarea id="auditRuleTxtArea" rows="10" cols="60" onfocus="focusDetection(this)" class="displaying"></textarea> 
+</div> <br> 
+<div id="checkPointDiv" class="displaying">
+	详细风险点： <br> <textarea id="checkPointContent" name="checkPointName" onfocus="focusDetection(this)" rows="10" cols="60" form="checkPointForm">请在这个输入框中添加详细风险点...</textarea>
+	<br> 
+	合规要求：<br> <textarea id="checkPointFulfillStandard" name="fulfillStandard" onfocus="focusDetection(this)" rows="10" cols="60" form="checkPointForm" >请在这个输入框中添加合规要求...</textarea>
+	<br>
+</div>
+<button onclick="submitWork()" class="displaying">提交</button>
 <script>
-function submitWork(){
-//checkpointType,subCatSelected,auditRule
-var adminPageData 				= document.getElementById("adminPageData");
-var checkPointType  			= adminPageData.getAttribute('data_checkpoint_type');
-var subCatSelected 				= document.getElementById("subCatSelected");
-var subCatIDSelected  			= subCatSelected.options[ subCatSelected.selectedIndex ].value;
-var auditRuleChanged			= adminPageData.getAttribute('auditRule-changed');
-if (auditRuleChanged == 'Y') {
-	var auditRuleEitherNewOrUpdated = document.getElementById("auditRule").value;
+function chckTypeChanged(chckType){
+	if (chckType == "Z"){
+       location.reload(true);
+	} else if ( chckType == "L"){
+	   //location.reload(true);
+	   //var radioClicked = document.getElementById('chckTypeL');
+	   var adminPageData 	= document.getElementById("adminPageData");
+	   adminPageData.setAttribute('data_checkpoint_type','L');
+	   populateSubCat();
+	   if (!document.getElementById('auditRuleLabel')){
+			var auditRuleLabel				= document.createElement("LABEL");
+				auditRuleLabel.id 			= "auditRuleLabel";
+				auditRuleLabel.className	= "displaying";
+				auditRuleLabel.innerHTML	= "排查方法：";
+			var auditRuleLabelDiv 			= document.getElementById("auditRuleLabelDiv");
+				auditRuleLabelDiv.appendChild(auditRuleLabel);
+		}
+		if (!document.getElementById('auditRuleTxtArea')){
+			var auditRuleTxtArea 			= document.createElement("textarea");
+				auditRuleTxtArea.id 		= "auditRuleTxtArea";
+				auditRuleTxtArea.rows 		= "10";
+				auditRuleTxtArea.cols 		= "60";
+			  //auditRuleTxtArea.onfocus	= "focusDetection(this)";
+				auditRuleTxtArea.onfocus	= function(){focusDetection(this)};
+				auditRuleTxtArea.onchange 	= function(){auditRuleChanged()};
+				auditRuleTxtArea.className	= "displaying";
+			var auditRuleDiv 				= document.getElementById("auditRuleDiv");
+				auditRuleDiv.appendChild(auditRuleTxtArea);
+		}
+	} else if (chckType == "Q"){
+		var adminPageData 	= document.getElementById("adminPageData");
+	    adminPageData.setAttribute('data_checkpoint_type','Q');
+		populateSubCat();
+		document.getElementById("setLabel").className 		= "displaying";
+		document.getElementById("subCatLabel").className 	= "displaying";
+		document.getElementById("setSelected").className 	= "displaying";
+		document.getElementById("subCatDiv").className 		= "displaying";
+		document.getElementById("checkPointDiv").className 	= "displaying";
+		rmAuditRule("auditRuleLabel","auditRuleTxtArea");
+		function rmAuditRule(auditRuleLabel,auditRuleTxtArea){
+			if (document.getElementById(auditRuleLabel)){
+				var auditRule = document.getElementById(auditRuleLabel);
+					auditRule.remove();
+			}
+			if(document.getElementById(auditRuleTxtArea)){
+				var auditRulex = document.getElementById(auditRuleTxtArea);
+					auditRulex.remove();
+			}
+	   }
+   }
 }
-var checkPointContent			= document.getElementById("checkPointContent").value;
-var checkPointFulfillStandard	= document.getElementById("checkPointFulfillStandard").value;
-var pViewDelete 				=  "checkPointType=" 			  + checkPointType 				+ "&" +
-								   "subCatID="					  + subCatIDSelected;
-var pSaveCheckPoint				=  pViewDelete		    	 	  								+ "&" +
-								   "auditRuleEitherNewOrUpdated=" + auditRuleEitherNewOrUpdated + "&" + 
-								   "auditRuleChanged="			  + auditRuleChanged			+ "&" +
-								   "checkPointContent=" 		  + checkPointContent 			+ "&" +
-								   "checkPointFulfillStandard="   + checkPointFulfillStandard;
-var http = new XMLHttpRequest();
-http.open("POST", "saveCheckPoint.asp", true);
-//Send the proper header information along with the request
-http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-http.onreadystatechange = function(){//Call a function when the state changes.
-	if(http.readyState == 4 && http.status == 200){
-	   var postSuccess = http.responseText;
-	   if (postSuccess == "Y"){
-			 if (confirm("提交成功，需要浏览提交结果吗？")){
-				navigateTo("viewDeleteCheckPoint.asp",pViewDelete);				
-			  }else {
-				 location.reload(true);
-			  }
-		} else {
-			  if (confirm("提交可能完全失败，请联系管理员，还需要浏览提交的结果吗？")){
-				 navigateTo("viewDeleteCheckPoint.asp",pViewDelete);
-			  }else {
-				 location.reload(true);
-			  }
+
+function submitWork(){
+	//checkpointType,subCatSelected,auditRule
+	var adminPageData 				= document.getElementById("adminPageData");
+	var checkPointType  			= adminPageData.getAttribute('data_checkpoint_type');
+	var subCatSelected 				= document.getElementById("subCatSelected");
+	var subCatIDSelected  			= subCatSelected.options[ subCatSelected.selectedIndex ].value;
+	var auditRuleChanged			= adminPageData.getAttribute('auditRule-changed');
+	if (auditRuleChanged == 'Y') {
+		var auditRuleEitherNewOrUpdated = document.getElementById("auditRule").value;
+	}
+	var checkPointContent			= document.getElementById("checkPointContent").value;
+	var checkPointFulfillStandard	= document.getElementById("checkPointFulfillStandard").value;
+	var pViewDelete 				=  "checkPointType=" 			  + checkPointType 				+ "&" +
+									   "subCatID="					  + subCatIDSelected;
+	var pSaveCheckPoint				=  pViewDelete		    	 	  								+ "&" +
+									   "auditRuleEitherNewOrUpdated=" + auditRuleEitherNewOrUpdated + "&" + 
+									   "auditRuleChanged="			  + auditRuleChanged			+ "&" +
+									   "checkPointContent=" 		  + checkPointContent 			+ "&" +
+									   "checkPointFulfillStandard="   + checkPointFulfillStandard;
+	var http = new XMLHttpRequest();
+	http.open("POST", "saveCheckPoint.asp", true);
+	//Send the proper header information along with the request
+	http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	http.onreadystatechange = function(){//Call a function when the state changes.
+		if(http.readyState == 4 && http.status == 200){
+		   var postSuccess = http.responseText;
+		   if (postSuccess == "Y"){
+				 if (confirm("提交成功，需要浏览提交结果吗？")){
+					navigateTo("viewDeleteCheckPoint.asp",pViewDelete);				
+				  }else {
+					 location.reload(true);
+				  }
+			} else {
+				  if (confirm("提交可能完全失败，请联系管理员，还需要浏览提交的结果吗？")){
+					 navigateTo("viewDeleteCheckPoint.asp",pViewDelete);
+				  }else {
+					 location.reload(true);
+				  }
+			}
 		}
 	}
-}
-http.send(pSaveCheckPoint)
+	http.send(pSaveCheckPoint)
 }
 function auditRuleChanged(){
 //set audit rule change flag to Y, so that we later know we will need to update/insert audit rule
@@ -132,20 +200,19 @@ function loadAuditRule(){
 	http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	http.onreadystatechange = function(){//Call a function when the state changes.
 		if(http.readyState == 4 && http.status == 200){
-		   var auditRuleLoaded  = http.responseText;
-		   //alert('auditRuleLoaded is: '+ auditRuleLoaded);
-		   	var auditRule = document.getElementById("auditRule");
-			auditRule.remove();
-			var auditRuleNew = document.createElement("textarea");
-			auditRuleNew.id = "auditRule";
-			auditRuleNew.onchange = function(){auditRuleChanged()};
-			auditRuleNew.onfocus  = function(){focusDetection(this)};
-			auditRuleNew.rows= "10";
-			auditRuleNew.cols= "60";
-			var auditRuleDiv = document.getElementById("auditRuleDiv");
-			auditRuleDiv.appendChild(auditRuleNew);
+		    var auditRuleLoaded  	= http.responseText;
+		   	var auditRuleTxtArea 	= document.getElementById("auditRuleTxtArea");
+			auditRuleTxtArea.remove();
+			var auditRuleNew 		= document.createElement("textarea");
+			auditRuleNew.id 		= "auditRuleTxtArea";
+			auditRuleNew.onchange 	= function(){auditRuleChanged()};
+			auditRuleNew.onfocus  	= function(){focusDetection(this)};
+			auditRuleNew.rows		= "10";
+			auditRuleNew.cols		= "60";
 			var node = document.createTextNode(auditRuleLoaded);
 			auditRuleNew.appendChild(node);
+			var auditRuleDiv = document.getElementById("auditRuleDiv");
+			auditRuleDiv.appendChild(auditRuleNew);
 		 }
 	   }
 	http.send(Params);
@@ -154,6 +221,9 @@ function populateSubCat(){
 	var url 			= "checkPointReturns.asp";
 	var setSelected 	= document.getElementById("setSelected");
 	var setID           = setSelected.options[ setSelected.selectedIndex ].value;
+	if ( setID == "setNotSelected") {
+	   return;
+	}
 	var adminPageData 	= document.getElementById("adminPageData");
 	var checkPointType  = adminPageData.getAttribute('data_checkpoint_type');
 	var Params 			= 'RequestType=' + 'SC' + '&' +
@@ -170,7 +240,6 @@ function populateSubCat(){
 			subCatSelect.remove();
 			var subCatSelectNew = document.createElement("select");
 			subCatSelectNew.id = "subCatSelected";
-			subCatSelectNew.onchange = function(){loadAuditRule()};
 			var option = document.createElement("option");
 			option.value = "";
 			option.text = "";
@@ -178,6 +247,13 @@ function populateSubCat(){
 			subCatSelectNew.appendChild(option);
 			var subCatDiv = document.getElementById("subCatDiv");
 			subCatDiv.appendChild(subCatSelectNew);
+			if (document.getElementById("chckTypeL").checked || document.getElementById("chckTypeZ").checked  ) {
+				subCatSelectNew.onchange = function(){loadAuditRule()};
+			}
+			if (subCatResponseTxt == "NoSubCatReturn"){
+			    alert("没有相应的系列返回，请检查是否添加过！");
+			    return;
+			}
 			var delimiter=String.fromCharCode(31);
 			var array = subCatResponseTxt.split(delimiter);
 			var catIdNdName = createArray(array.length/2,2);
@@ -216,7 +292,7 @@ console.log("subCatID:"+ subCatID);
 console.log("focusedElement.id:"+ focusedElement.id);
 var adminPageData	= document.getElementById("adminPageData");
 var checkPointType	= adminPageData.getAttribute('data_checkpoint_type');
-if ((focusedElement.id == "auditRule" || focusedElement.id == "checkPointContent"  || focusedElement.id == "checkPointFulfillStandard") 
+if ((focusedElement.id == "auditRuleTxtArea" || focusedElement.id == "checkPointContent"  || focusedElement.id == "checkPointFulfillStandard") 
     && subCatID == "")
   {
 	alert("请先选择选择好分类！");
