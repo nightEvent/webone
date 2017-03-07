@@ -144,7 +144,7 @@ function submitWork(){
 	var auditRuleChanged			= adminPageData.getAttribute('auditRule-changed');
 	var auditRuleEitherNewOrUpdated = "no need for insert or update";
 	if (auditRuleChanged == 'Y') { //only Y, will then do update or insert in saveCheckPoint.asp
-		var auditRuleEitherNewOrUpdated = document.getElementById("auditRule").value;
+		var auditRuleEitherNewOrUpdated = document.getElementById("auditRuleTxtArea").value;
 	}
 	var checkPointContent			= document.getElementById("checkPointContent").value;
 	var checkPointFulfillStandard	= document.getElementById("checkPointFulfillStandard").value;
