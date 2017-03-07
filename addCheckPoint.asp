@@ -142,7 +142,8 @@ function submitWork(){
 	var subCatSelected 				= document.getElementById("subCatSelected");
 	var subCatIDSelected  			= subCatSelected.options[ subCatSelected.selectedIndex ].value;
 	var auditRuleChanged			= adminPageData.getAttribute('auditRule-changed');
-	if (auditRuleChanged == 'Y') {
+	var auditRuleEitherNewOrUpdated = "no need for insert or update";
+	if (auditRuleChanged == 'Y') { //only Y, will then do update or insert in saveCheckPoint.asp
 		var auditRuleEitherNewOrUpdated = document.getElementById("auditRule").value;
 	}
 	var checkPointContent			= document.getElementById("checkPointContent").value;
