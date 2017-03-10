@@ -15,7 +15,7 @@ a.homeLink:hover,a.homeLink.active{
 <script src="lib/jquery.min.js"></script>
 </head>
 <body background="images/homeBackground.jpg" >
-<a class="homeLink" href="http://localhost:88/home.asp">主页</a>  &nbsp  &nbsp <a class="homeLink" href=" admin.asp">返回系统管理页面</a> <br> <br>
+<a class="homeLink" href="http://localhost:88/home.asp">Home</a> <br> <br>
 <label>用户</label> <br>
 <select id="userIdSelected" name="用户" autofocus>
 <option value="XX" style="display:none;"></option>
