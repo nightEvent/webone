@@ -4,16 +4,14 @@
 <title>太平人寿风险排查系统</title>
 <meta charset="utf-8" />
 <!-- <link rel="stylesheet" href="/w3.css"> -->
-<link rel="shortcut icon" href="favicon.ico" >
-<link rel="icon" type="image/gif" href="animated_favicon1.gif">
+<link rel="icon" href="images/favicon.ico" type="image/x-icon">
 <style>
-<!-- new implementation starts -->
-ul.ruleul {
+ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: #333;   !important
+    background: #80ccff;!important
 }
 
 li {
@@ -58,32 +56,6 @@ li.dropdown {
 .dropdown:hover .dropdown-content {
     display: block;
 }
-
-<!-- new implementation ends -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -193,7 +165,7 @@ button {
 .cancelbtn {
     width: auto;
     padding: 10px 18px;
-    background-color: #f44336;
+    background-color: yellow;
 }
 
 /* Center the image and position the close button */
@@ -336,6 +308,15 @@ p.big {
   stroke-width: 1.5px;
 }
 
+hr { 
+    display: block;
+    margin-top: 0.1em;
+    margin-bottom: 0.05em;
+    margin-left: auto;
+    margin-right: auto;
+    border-style: inset;
+    border-width: 1px;
+}
 </style>
 
 
@@ -376,7 +357,6 @@ if loggedIn = "Y" then
 	if account = "管理员" then
 		response.write 	"    <a href=""admin.asp"">系统管理</a> " & _
 						"	</div>							   " & _
-						"	<div id=""main"" >				   " & _
 						"	<h1 >  </h1>   					   " & _
 						"<img src=""images/logo.png"" alt=""Mountain View"" > " & _
 						"尊敬的" & account & "用户，您好，"  & "欢迎使用风险排查系统！"  & _
@@ -386,7 +366,6 @@ if loggedIn = "Y" then
 	else 
 		response.write 	"									   " & _
 						"	</div>							   " & _
-						"	<div id=""main"" >				   " & _
 						"	<h1 >  </h1>   					   " & _
 						"<img src=""images/logo.png"" alt=""Mountain View"" > " & _
 						"尊敬的" & account & "用户，您好，"  & "欢迎使用风险排查系统！"  & _
@@ -399,7 +378,6 @@ elseif loggedIn = "N" then
 	'create logging button 
 	response.write "  									   " & _
 				   "	</div>							   " & _
-				   "	<div id=""main"" >				   " & _
 				   "	<h1 >  </h1>   					   " & _
 				   "<img src=""images/logo.png"" alt=""Mountain View"" > " & _
 				   "<button id=""loginButton""" & _
@@ -408,7 +386,6 @@ elseif loggedIn = "N" then
 else 
 	response.write "  									   " & _
 				   "	</div>							   " & _
-				   "	<div id=""main"" >				   " & _
 				   "	<h1 >  </h1>   					   " & _
 				   "<img src=""images/logo.png"" alt=""Mountain View"" > " & _
 				   "<button id=""loginButton""" & _
@@ -430,14 +407,8 @@ end if
 <h2>太平人寿保险有限公司</h2>
 <h3>甘肃分公司</h3>
 <h4>TAIPING LIFE INSURANCE CO.,LTD.GANSU BRANCH</h4>
-<hr />​
 </div>
-
-<span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; 菜单 </span>   
-<br>
-</div>
-
-
+<hr>
 <ul >
   <li class="dropdown">
     <a href="#" class="dropbtn">法规制度</a>
@@ -449,25 +420,25 @@ end if
   <li class="dropdown">
     <a href="#" class="dropbtn">风险防范</a>
     <div class="dropdown-content">
-		<a href="#" onclick=checkPointClicked("selfEva") >风险点自查</a>
-		<a href="#" onclick=checkPointClicked("selfEva") >全面风险排查</a>
-		<a href="#" onclick=checkPointClicked("selfEva") >临时风险排查</a>
+		<a href="#" onclick=checkPointClicked("selfEva","Z") >风险点自查</a>
+		<a href="#" onclick=checkPointClicked("selfEva","Q") >全面风险排查</a>
+		<a href="#" onclick=checkPointClicked("selfEva","L") >临时风险排查</a>
     </div>
   </li>
   <li class="dropdown">
     <a href="#" class="dropbtn">报告</a>
     <div class="dropdown-content">
-		<a href="#" onclick=checkPointClicked("report") >自查报告</a>
-		<a href="#" onclick=checkPointClicked("report") >全面风险排查报告</a>
-		<a href="#" onclick=checkPointClicked("report") >临时风险排查报告</a>
+		<a href="#" onclick=checkPointClicked("report","Z") >自查报告</a>
+		<a href="#" onclick=checkPointClicked("report","Q") >全面风险排查报告</a>
+		<a href="#" onclick=checkPointClicked("report","L") >临时风险排查报告</a>
     </div>
   </li>
   <li class="dropdown">
     <a href="#" class="dropbtn">系统管理</a>
     <div class="dropdown-content">
-      <a href="addCheckPoint.asp?checkPointType=Q">全面风险点</a>
-      <a href="addCheckPoint.asp?checkPointType=Z">自查风险点</a>
-      <a href="addCheckPoint.asp?checkPointType=L">临时风险点</a>
+	  <a href="addCheckPoint.asp">添加风险点</a>
+	  <a href="addSubCat.asp">添加分类</a>
+	  <a href="addCheckPoint.asp">添加对应制度</a>
 	  <a href="passwordResetPg.asp">修改密码</a>
     </div>
   </li>
@@ -477,7 +448,25 @@ end if
 </br>
 </br>
 </br>
-
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+<hr>
 <h3>2016年度各部门风险自查违规比例:</h3>
 </br>
 <svg id="barChartSvg" width="960" height="500"></svg>
@@ -616,7 +605,7 @@ function logOut(){
 	xmlhttp.open("GET", "logOut.asp", true); 
 	xmlhttp.send();
 }
-function checkPointClicked(navType){
+function checkPointClicked(reqType,chkType){
 	var navigateTo
 	//starts, get logged In status 
 	var loggedIn = "N";
@@ -625,7 +614,7 @@ function checkPointClicked(navType){
 		if (this.readyState == 4 && this.status == 200) {
 			loggedIn = this.responseText;
 				if (loggedIn == 'Y'){
-					navigateTo="/selfEvaNavigation.asp?navType=" + navType;
+					navigateTo="selfEvaNavigation.asp?reqType=" + reqType + "&chkType=" + chkType;
 					navigation(navigateTo);
 				} else {
 					document.getElementById('id01').style.display='block'

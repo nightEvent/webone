@@ -7,7 +7,8 @@ session.codepage=65001
 %>
 
 <head>
-<title>hello..</title>
+<link rel="icon" href="images/favicon.ico" type="image/x-icon">
+<title>浏览系列风险点</title>
 
 
 	<style>
@@ -301,7 +302,7 @@ function startChecking(){
 	var parameters = "checkPointIdList=" + getInlist(audit_procedures);
 	console.log(parameters)
 	var http = new XMLHttpRequest();
-	http.open("POST", "deleteCheckPoints.asp", true);
+	http.open("POST", "deleteTheAdded.asp", true);
 	http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	http.onreadystatechange = function(){
 	if(http.readyState == 4 && http.status == 200){
