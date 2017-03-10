@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-<link rel="shortcut icon" href="favicon.ico" >
+<link rel="icon" href="images/favicon.ico" type="image/x-icon">
     <title>太平人寿风险排查系统</title>
 	<meta charset="utf-8" />
 	<!-- <link rel="stylesheet" href="/w3.css"> -->
