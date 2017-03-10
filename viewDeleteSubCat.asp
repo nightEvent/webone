@@ -160,7 +160,9 @@ function buttonBack(){
 //var checkPointType  	= currentPageData.getAttribute('data_checkpoint_type');
 navigates("addSubCat.asp")
 }
-
+function homeClicked(){
+navigates("home.asp")
+}
 function navigates(navigateTo){
  window.location.href = navigateTo
 };
