@@ -90,7 +90,8 @@ End If
 
 'preparing search result buttons
 Dim topHead, secondH,sqlCount, count,startCheck, buttonSubmit,buttonBack
-sqlCount="select count(1) as checkPointCnt from webone.checkpoints where checkpoint_type = '" & checkPointType & "' and sub_cat_id = " & subCatId & " ;"
+'sqlCount="select count(1) as checkPointCnt from webone.checkpoints where checkpoint_type = '" & checkPointType & "' and sub_cat_id = " & subCatId & " ;"
+sqlCount="select count(1) as checkPointCnt from webone.checkpoints where sub_cat_id = " & subCatId & " ;"
 Set objRS = objConn.Execute(sqlCount)
 while Not objRs.EOF
 	count=objRs.fields("checkPointCnt")
@@ -145,7 +146,9 @@ Response.Write "</table>"
 Response.Write "<br>"
 'Response.Write startCheck 
 Response.Write buttonBack
-Response.Write buttonSubmit
+if checkPointsCount<>1 then   ' meaning there is zero checkpoint for this subCat, so no meaning to provide buttonSubmit, 
+Response.Write buttonSubmit   ' more importantly selfEvaNavigation page link parameter chk_type is retrieved from cusor record
+end if						  ' when navigate back from issueTrackerBuilder.
 Response.Write "<input type=""hidden"" name=""orderNumber"" id=""checkPointsCount"" value=""" & ( checkPointsCount - 1 ) & """ />"
 Response.Write "<br>"
 Response.Write "<p id=""linkedRules""></p>"
@@ -387,15 +390,14 @@ function buttonBack(){
 		navigates(document.referrer);
 	} else {
 	   	var singleCatSheetPgData 	= document.getElementById("singleCatSheetPgData");
-		var chkType  				= adminPageData.getAttribute('chkType');
-		var account  				= adminPageData.getAttribute('account');
+		var chkType  				= singleCatSheetPgData.getAttribute('chkType');
+		var account  				= singleCatSheetPgData.getAttribute('account');
 	    var params					= "reqType=" + "selfEva" + "&" +
-									= "chkType=" + chkType + "&" +
-									= "account=" + account;					
+									  "chkType=" + chkType + "&" +
+									  "account=" + account;					
 	   navigates("selfEvaNavigation.asp?" + params);
 	}
 }
-
 </script>
  
 </body>
