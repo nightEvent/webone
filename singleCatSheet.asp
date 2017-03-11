@@ -16,6 +16,7 @@ session.codepage=65001
 		}
 		table, td, th {
 			border: 1px solid black;
+			text-align: center
 		}
         
 		table {
@@ -97,7 +98,11 @@ while Not objRs.EOF
 	count=objRs.fields("checkPointCnt")
 	objRS.MoveNext
 wend
-topHeader=" <tr> <td colspan=""7""> 甘肃分公司内控风险自查表  </td> </tr> "
+dim topHeaderZ,topHeaderL,topHeaderQ,topHeader
+topHeaderZ=" <tr> <td colspan=""7""> 风险自查  </td> </tr> "
+topHeaderL=" <tr> <td colspan=""7""> 临时排查  </td> </tr> "
+topHeaderQ=" <tr> <td colspan=""7""> 全面排查  </td> </tr> "
+topHeader=" <tr> <td colspan=""7""> 风险排查  </td> </tr> "
 secondH=" <tr> <th>系列</th> <th>分类</th> <th>详细风险点</th>  <th>合规要求</th>  <th>排查方法</th>  <th>排查经过</th> <th>发现问题</th>  </tr> "
 startCheck="<button onclick=""startChecking()""> 排查开始 </button>"
 buttonSubmit="<button onclick=""startChecking()""> 进入问题追踪页面 </button>"
