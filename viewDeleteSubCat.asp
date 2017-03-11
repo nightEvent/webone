@@ -129,7 +129,7 @@ var fieldDimitor=String.fromCharCode(separatorASCII)
 return arr.join(fieldDimitor);
 }
 
-function arrayToSeparatedList(arr,separatorASCII){
+function arrayToJoin2(arr,separatorASCII){
 	var SeparatedList="nothingToBeTold";
 	var fieldDimitor=String.fromCharCode(separatorASCII); //31 for unit separator, 44 for comma
 	for(var i = 0; i < arr.length; j++) {

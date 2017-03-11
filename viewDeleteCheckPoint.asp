@@ -39,64 +39,28 @@ session.codepage=65001
 response.expires=-1
 Session.Timeout=1440
 Dim subCat,checkPointType,sConnection, objConn , objRS ,headerRow, queryStr 
+sConnection = "DRIVER={MySQL ODBC 5.3 ANSI Driver}; SERVER=localhost; DATABASE=webone; UID=weboneuser;PASSWORD=weboneuser;PTION=3"
+Set objConn = Server.CreateObject("ADODB.Connection") 
+objConn.Open(sConnection)
+
 subCat 			= Request.querystring("subCatID")
 checkPointType	= Request.querystring("checkPointType")
 
 response.write "<div id=""currentPageData"" data_checkpoint_type=""" & checkPointType & """ ></div>"
 
-queryStr="SELECT CONVERT(sub_cat_id USING utf8) sub_cat_id, set_name , sub_cat_name , checkpoint , fulfill_standard, audit_rule,checkpoint_id FROM webone.selfEva where 1= 1  "
-queryStr=queryStr & " AND checkpoint_type = '" & checkPointType & "' "
-queryStr=queryStr & " AND sub_cat_id  = " & "'" & subCat & "'"  & " order by  checkpoint_id ASC ;"
-
-sConnection = "DRIVER={MySQL ODBC 5.3 ANSI Driver}; SERVER=localhost; DATABASE=webone; UID=weboneuser;PASSWORD=weboneuser;PTION=3" 
-
-Set objConn = Server.CreateObject("ADODB.Connection") 
-objConn.Open(sConnection) 
-
-
-'getting record user previously input
-Dim procedureList, arr(),arrCB(),ind,cnt,cntCB,loadInputHistory
-procedureList=Request.Form("procedureList")
-
-delimiter = Chr(31)
-ind=0
-cnt=0
-cntCB=0
-loadInputHistory="N"
-ReDim Preserve arr(10)
-ReDim Preserve arrCB(10)
-previousPage = Request.ServerVariables("HTTP_REFERER")
-if procedureList <> "" AND previousPage <> "http://localhost:88/selfEvaNavigation.asp?navType=selfEva" Then  'checkpointsNavigation.asp
-loadInputHistory="Y"
-arrays=Split(procedureList,delimiter)
-	for each x in arrays
-		  if (ind = 0) OR ((ind mod 3) = 0) then 
-				arr(cnt)=x
-				cnt = cnt + 1
-				if (cnt > 2) then
-				 ReDim Preserve arr(UBound(arr) + 1)
-				end if
-		  elseif ((ind mod 3) = 1) then
-				if ( x = "") OR ( x = "N" ) then
-				  arrCB(cntCB)="unchecked"
-				else
-				  arrCB(cntCB)="checked"
-				end if
-				cntCB = cntCB + 1
-				if (cntCB > 2) then
-				 ReDim Preserve arrCB(UBound(arrCB) + 1)
-				end if
-		  end if
-		  ind= ind + 1
-	next
-End If
-
+if checkPointType <> "Q" then
+	queryStr="SELECT sub_cat_id, set_name , sub_cat_name , checkpoint , fulfill_standard, audit_rule,checkpoint_id FROM webone.selfEva where 1= 1  "
+	queryStr=queryStr & " AND sub_cat_id  = " & "'" & subCat & "'"  & " order by  checkpoint_id ASC ;"
+else 
+	queryStr="SELECT sub_cat_id, set_name,sub_cat_name ,checkpoint ,fulfill_standard,checkpoint_id FROM webone.selfEvaQ where 1= 1  "
+	queryStr=queryStr & " AND sub_cat_id  = " & "'" & subCat & "'"  & " order by  checkpoint_id ASC ;"
+end if
 
 'preparing search result buttons
 Dim topHead, secondH, sqlCount,count, buttonSubmit,buttonBack
 topHeader=" <tr> <td colspan=""7""> 当前已添加在分类的项目  </td> </tr> "
 secondH=" <tr> <th>系列</th> <th>分类</th> <th>详细风险点</th>  <th>合规要求</th>  <th>排查方法</th> <th style=""display:none;"" > 排查过程</th>  <th>勾选要删除的项</th>  </tr> "
-sqlCount="select count(1) as checkPointCnt from webone.checkpoints where checkpoint_type = '" & checkPointType & "' and sub_cat_id = " & subCat & " ;"
+sqlCount="select count(1) as checkPointCnt from webone.checkpoints where sub_cat_id = " & subCat & " ;"
 Set objRS = objConn.Execute(sqlCount)
 while Not objRs.EOF
 	count=objRs.fields("checkPointCnt")

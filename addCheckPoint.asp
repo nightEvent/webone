@@ -188,12 +188,7 @@ function loadAuditRule(){
 	var url 			= "checkPointReturns.asp";
 	var subCatSelected  = document.getElementById("subCatSelected");
 	var subCatID		= subCatSelected.options[ subCatSelected.selectedIndex ].value;
-	//you found it's already selected then your responsibility to store it in global pool for sumbmission reference
-	var adminPageData 	= document.getElementById("adminPageData");
-	
-	var checkPointType  = adminPageData.getAttribute('data_checkpoint_type');
 	var Params 			= "RequestType=" + window.encodeURIComponent("AR") + "&" +
-						  "checkPointType=" + window.encodeURIComponent(checkPointType) +  "&" +
 						  "subCatID=" +  window.encodeURIComponent(subCatID);
 	var http 			= new XMLHttpRequest();
 	http.open("POST", url, true);
