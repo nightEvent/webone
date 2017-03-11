@@ -7,8 +7,8 @@ session.codepage=65001
 %>
 
 <head>
-<title>hello..</title>
-
+<title>问题报告</title>
+<link rel="icon" href="images/favicon.ico" type="image/x-icon">
 
 	<style>
 		a, u {
@@ -139,8 +139,7 @@ function checkPointClicked(checkPointId){
         xmlhttp.send();
     }
 }
-function buttonBack(){
-}
+
 function navigates(navigateTo){
  window.location.href = navigateTo
 }; 

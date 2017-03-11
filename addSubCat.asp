@@ -75,6 +75,7 @@ a.homeLink:hover,a.homeLink.active{
 function submitWork(){
 	var setSelected  				= document.getElementById("setSelected");
 	var setIDSelected				= setSelected.options[ setSelected.selectedIndex ].value;
+	var adminPageData 				= document.getElementById("adminPageData");
 	var checkPointType  			= adminPageData.getAttribute('data_checkpoint_type');
 	var subCatTxtArea	 			= document.getElementById("subCatTxtArea").value;
 	

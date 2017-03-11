@@ -38,17 +38,14 @@ session.codepage=65001
 <%
 response.expires=-1
 Session.Timeout=1440
-Dim subCatId,checkPointType,sConnection, objConn , objRS ,headerRow, queryStr 
-subCatId 			= Request.querystring("subCatId")
-checkPointType	= "Z"
+Dim subCatId,sConnection, objConn , objRS ,headerRow, queryStr 
+subCatId = Request.querystring("subCatId")
 
-queryStr="SELECT CONVERT(sub_cat_id USING utf8) sub_cat_id, set_name , sub_cat_name , checkpoint , fulfill_standard, audit_rule,checkpoint_id FROM webone.selfEva where 1= 1  "
-queryStr=queryStr & " AND checkpoint_type = '" & checkPointType & "' "
+queryStr="SELECT sub_cat_id,chk_Type, set_name , account, sub_cat_name , checkpoint , fulfill_standard, audit_rule,checkpoint_id FROM webone.selfEva where 1= 1  "
 queryStr=queryStr & " AND sub_cat_id  = " & "'" & subCatId & "'"  & " order by  checkpoint_id ASC ;"
 sConnection = "DRIVER={MySQL ODBC 5.3 ANSI Driver}; SERVER=localhost; DATABASE=webone; UID=weboneuser;PASSWORD=weboneuser;PTION=3"
 Set objConn = Server.CreateObject("ADODB.Connection") 
 objConn.Open(sConnection) 
-
 
 'getting record user previously input
 Dim procedureList, arr(),arrCB(),ind,cnt,cntCB,loadInputHistory
@@ -65,7 +62,7 @@ loadInputHistory="N"
 ReDim Preserve arr(10)
 ReDim Preserve arrCB(10)
 previousPage = Request.ServerVariables("HTTP_REFERER")
-if procedureList <> "" AND previousPage <> "http://localhost:88/selfEvaNavigation.asp?navType=selfEva" Then  'checkpointsNavigation.asp
+if procedureList <> "" then 'AND previousPage <> "http://localhost:88/selfEvaNavigation.asp?navType=selfEva" Then  'checkpointsNavigation.asp  'seems not required
 loadInputHistory="Y"
 arrays=Split(procedureList,delimiter)
 	for each x in arrays
@@ -112,6 +109,7 @@ checkPointsCount=1
 Set objRS = objConn.Execute(queryStr)
 While Not objRS.EOF
 IF checkPointsCount=1 Then
+	Response.Write "<div id=""singleCatSheetPgData"" chkType=""" & objRS.Fields("chk_Type") & """ account=""" & objRS.Fields("account") &  """> </div>"
 	Response.Write "<tr > <td rowspan=""" & count & """  >"  & objRS.Fields("set_name")      &  "</td> "
 	Response.Write "<td rowspan="""      & count & """  >"  & objRS.Fields("sub_cat_name") &  "</td>  "
 
@@ -353,15 +351,14 @@ function post(path, params, method) {
 			  console.log('this is params (' + key + ') for sure. Value: ' + params[key]); 
             form.appendChild(hiddenField);
          }
-    }
-
+    }	
     document.body.appendChild(form);
     form.submit();
 }
 
 function navigates(navigateTo){
  window.location.href = navigateTo
-};
+}
 
 function destroySessionVar(varName){
 var http = new XMLHttpRequest();
@@ -378,17 +375,28 @@ http.send(varName);
 }
 
 function homeClicked(){
-//clear session variable before nav
-destroySessionVar("procedureList")
-navigates("home.asp")
+navigates("home.asp");
+}
+
+function navigates(navigateTo){
+ window.location.href = navigateTo;
 }
 
 function buttonBack(){
-//clear session variable before nav
-destroySessionVar("procedureList")
-navigates("selfEvaNavigation.asp?navType=selfEva")
+	if (document.referrer.includes("selfEvaNavigation")){
+		navigates(document.referrer);
+	} else {
+	   	var singleCatSheetPgData 	= document.getElementById("singleCatSheetPgData");
+		var chkType  				= adminPageData.getAttribute('chkType');
+		var account  				= adminPageData.getAttribute('account');
+	    var params					= "reqType=" + "selfEva" + "&" +
+									= "chkType=" + chkType + "&" +
+									= "account=" + account;					
+	   navigates("selfEvaNavigation.asp?" + params);
+	}
 }
-</script>
 
+</script>
+ 
 </body>
 </html>

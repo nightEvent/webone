@@ -1,7 +1,8 @@
 ﻿<!DOCTYPE html>
 <html>
-<header>
+<head>
     <title>太平人寿风险排查系统</title>
+	<link rel="icon" href="images/favicon.ico" type="image/x-icon">
 	<meta charset="utf-8" />
 <style>
 a, u {
@@ -60,7 +61,7 @@ a.homeLink:hover,a.homeLink.active{
   display: none;
 }
 </style>
-</header>
+</head>
 
 <body  background="images/singleCatSheet.jpg">
 <a class="homeLink" href="http://localhost:88/home.asp">Home</a>
@@ -70,18 +71,18 @@ a.homeLink:hover,a.homeLink.active{
 Session.Timeout=60
 response.expires=-1
 Response.CharSet = "utf-8"
-Dim sConnection, objConn , objRS ,headerRow, queryStr, hostname,setName,reqType,chkType
+Dim sConnection, objConn , objRS ,headerRow, queryStr, hostname,account,reqType,chkType
 hostname="localhost:88"
-setName=Session("setName")
+account=Request.querystring("account")
 reqType=Request.querystring("reqType")
 chkType=Request.querystring("chkType")
-if setName = "管理员" then
+if account = "admin" then
 queryStr="SELECT distinct sub_cat_id, set_name,sub_cat_name FROM webone.subCatNav where 1= 1 " & _
          " AND  chk_Type = '" &  chkType & "' ;"
 else
-'queryStr="SELECT distinct sub_cat_id, set_name,sub_cat_name FROM webone.subCatNav where 1= 1  and set_name = """  & setName & """ ;"
+'queryStr="SELECT distinct sub_cat_id, set_name,sub_cat_name FROM webone.subCatNav where 1= 1  and set_name = """  & account & """ ;"
 queryStr="SELECT distinct sub_cat_id, set_name,sub_cat_name FROM webone.subCatNav where 1= 1  " & _ 
-         " AND set_name = """  & setName & """"  & _
+         " AND set_name_pinyin = """  & account & """"  & _
          " AND chk_Type ='" & chkType & "' ;"
 end if
 
@@ -116,7 +117,7 @@ Set objRS = Nothing
 objConn.Close
 Set objConn = Nothing
 Response.Write "</br>"
-if reqType <> "selfEva" and setName <> "" then  'setName <> "" is to avoid session expire
+if reqType <> "selfEva" and account <> "" then  'setName <> "" is to avoid session expire
 Response.Write "<a class=""hoverEff""  href=""downloadExport.asp"">生成表格并下载</a>"
 Response.Write "</br>"
 Response.Write "<a class=""hoverEff"" href=""docReportBuilder.asp"">生成报告并下载</a>"

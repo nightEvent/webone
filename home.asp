@@ -337,7 +337,7 @@ hr {
   <a href="#" onclick=checkPointClicked("report") >全面风险排查报告</a>
 <%
 'Get loggin status starts
-Dim loggedIn,account,wrongPassWord
+Dim loggedIn,setName,wrongPassWord,account
 loggedIn = "X"
 wrongPassWord = "N"
 if IsEmpty(Session("LoggedIn")) then
@@ -348,18 +348,20 @@ else
 	wrongPassWord = "Y"
   else
 	loggedIn=Session("LoggedIn")
-	account=Session("setName")
+	setName=Session("setName")
 	loggedIn = "Y"
+	account=Session("account")
+	response.write "<div id=""homePageData"" account=""" & account &  """ ></div>"
   end if
 end If
 
 if loggedIn = "Y" then
-	if account = "管理员" then
+	if setName = "管理员" then
 		response.write 	"    <a href=""admin.asp"">系统管理</a> " & _
 						"	</div>							   " & _
 						"	<h1 >  </h1>   					   " & _
 						"<img src=""images/logo.png"" alt=""Mountain View"" > " & _
-						"尊敬的" & account & "用户，您好，"  & "欢迎使用风险排查系统！"  & _
+						"尊敬的" & setName & "用户，您好，"  & "欢迎使用风险排查系统！"  & _
 						"<button id=""logOutButton""" & _
 						" onclick=""logOut()""" & _  
 						" style=""font-size:24px;width:auto;"">退出</button>"
@@ -368,12 +370,12 @@ if loggedIn = "Y" then
 						"	</div>							   " & _
 						"	<h1 >  </h1>   					   " & _
 						"<img src=""images/logo.png"" alt=""Mountain View"" > " & _
-						"尊敬的" & account & "用户，您好，"  & "欢迎使用风险排查系统！"  & _
+						"尊敬的" & setName & "用户，您好，"  & "欢迎使用风险排查系统！"  & _
 						"<button id=""logOutButton""" & _
 						" onclick=""logOut()""" & _  
 						" style=""font-size:24px;width:auto;"">退出</button>"
 	end if
-	'diplay logged in account name
+	'diplay logged in setName name
 elseif loggedIn = "N" then
 	'create logging button 
 	response.write "  									   " & _
@@ -420,17 +422,17 @@ end if
   <li class="dropdown">
     <a href="#" class="dropbtn">风险防范</a>
     <div class="dropdown-content">
-		<a href="#" onclick=checkPointClicked("selfEva","Z") >风险点自查</a>
-		<a href="#" onclick=checkPointClicked("selfEva","Q") >全面风险排查</a>
-		<a href="#" onclick=checkPointClicked("selfEva","L") >临时风险排查</a>
+		<a href="#" onclick=checkPointClicked("selfEva","Z") >自查</a>
+		<a href="#" onclick=checkPointClicked("selfEva","Q") >全面排查</a>
+		<a href="#" onclick=checkPointClicked("selfEva","L") >临时排查</a>
     </div>
   </li>
   <li class="dropdown">
     <a href="#" class="dropbtn">报告</a>
     <div class="dropdown-content">
 		<a href="#" onclick=checkPointClicked("report","Z") >自查报告</a>
-		<a href="#" onclick=checkPointClicked("report","Q") >全面风险排查报告</a>
-		<a href="#" onclick=checkPointClicked("report","L") >临时风险排查报告</a>
+		<a href="#" onclick=checkPointClicked("report","Q") >全面排查报告</a>
+		<a href="#" onclick=checkPointClicked("report","L") >临时排查报告</a>
     </div>
   </li>
   <li class="dropdown">
@@ -438,7 +440,7 @@ end if
     <div class="dropdown-content">
 	  <a href="addCheckPoint.asp">添加风险点</a>
 	  <a href="addSubCat.asp">添加分类</a>
-	  <a href="addCheckPoint.asp">添加对应制度</a>
+	  <a href="addCheckPoint.asp">添加对应条文</a>
 	  <a href="passwordResetPg.asp">修改密码</a>
     </div>
   </li>
@@ -585,7 +587,7 @@ d3.tsv("trendLineBar.tsv", function(d) {
 
     <div class="container">
       <label><b>账号</b></label>
-      <input type="text" placeholder="输入账号" name="userName" required>
+      <input type="text" placeholder="输入账号" name="account" required>
       <label><b>密码</b></label>
       <input type="password" placeholder="输入密码" name="passWord" required>
       <button type="submit" style="font-size:20px;">登陆</button>  
@@ -614,10 +616,12 @@ function checkPointClicked(reqType,chkType){
 		if (this.readyState == 4 && this.status == 200) {
 			loggedIn = this.responseText;
 				if (loggedIn == 'Y'){
-					navigateTo="selfEvaNavigation.asp?reqType=" + reqType + "&chkType=" + chkType;
+					var homePageData 		= document.getElementById("homePageData");
+					var account  			= homePageData.getAttribute('account');
+					navigateTo="selfEvaNavigation.asp?reqType=" + reqType + "&chkType=" + chkType + "&account=" + account;
 					navigation(navigateTo);
 				} else {
-					document.getElementById('id01').style.display='block'
+					document.getElementById('id01').style.display='block'  //once logged in, home page will be refreshed.
 				}
 		}
 	}

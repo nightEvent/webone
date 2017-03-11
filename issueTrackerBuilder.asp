@@ -239,7 +239,7 @@ function submitProcedures(){
 	  }
 	}
 	*/
-	post("saveInDB.asp",parameters,"post","N","http://localhost:88/selfEvaNavigation.asp?navType=selfEva")
+	post("saveInDB.asp",parameters,"post","N","selfEvaNavigation.asp?navType=selfEva")
 }
 function buttonBack(){
 	var table = document.getElementById('selfEvaSheet');

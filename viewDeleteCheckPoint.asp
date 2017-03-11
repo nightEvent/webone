@@ -7,9 +7,8 @@ session.codepage=65001
 %>
 
 <head>
-<link rel="icon" href="images/favicon.ico" type="image/x-icon">
 <title>浏览系列风险点</title>
-
+<link rel="icon" href="images/favicon.ico" type="image/x-icon">
 
 	<style>
 		a, u {
