@@ -63,7 +63,7 @@ loadInputHistory="N"
 ReDim Preserve arr(10)
 ReDim Preserve arrCB(10)
 previousPage = Request.ServerVariables("HTTP_REFERER")
-if procedureList <> "" then 'AND previousPage <> "http://localhost:88/selfEvaNavigation.asp?navType=selfEva" Then  'checkpointsNavigation.asp  'seems not required
+if procedureList <> "" then
 loadInputHistory="Y"
 arrays=Split(procedureList,delimiter)
 	for each x in arrays
@@ -91,7 +91,6 @@ End If
 
 'preparing search result buttons
 Dim topHead, secondH,sqlCount, count,startCheck, buttonSubmit,buttonBack
-'sqlCount="select count(1) as checkPointCnt from webone.checkpoints where checkpoint_type = '" & checkPointType & "' and sub_cat_id = " & subCatId & " ;"
 sqlCount="select count(1) as checkPointCnt from webone.checkpoints where sub_cat_id = " & subCatId & " ;"
 Set objRS = objConn.Execute(sqlCount)
 while Not objRs.EOF
