@@ -55,7 +55,7 @@ end if
 
 totalCheckPoints=(len(checkPointsList) - len(replace(checkPointsList, ",", "")) + 1)
 
-queryStr="SELECT CONVERT(sub_cat_id USING utf8) sub_cat_id, set_name , sub_cat_name , checkpoint , fulfill_standard, audit_rule, sub_cat_name,checkpoint_id FROM webone.selfEva where 1= 1  "
+queryStr="SELECT sub_cat_id,chk_Type, set_name , account, sub_cat_name , checkpoint , fulfill_standard, sub_cat_name,checkpoint_id FROM webone.selfEvaQ where 1= 1  "
 queryStr=queryStr & " AND checkpoint_id in " & "(" & checkPointsList & ")"  & " order by  checkpoint_id ASC ;"
 
 sConnection = "DRIVER={MySQL ODBC 5.3 ANSI Driver}; SERVER=localhost; DATABASE=webone; UID=weboneuser;PASSWORD=weboneuser;PTION=3" 
@@ -80,15 +80,14 @@ Dim checkPointIndex
 checkPointIndex=1
 While Not objRS.EOF
 IF checkPointIndex=1 Then
-Response.Write "<tr> <td rowspan=""" & totalCheckPoints & """  >"  & objRS.Fields("set_name")   &  "</td> "
-Response.Write "<td rowspan="""      & totalCheckPoints & """ >"  & objRS.Fields("sub_cat_name") &  "</td>  "
-Response.Write " <td >" & objRS.Fields("checkpoint") &  "</td> "
-Response.Write "<td contenteditable ></td> "
-Response.Write "<td contenteditable ></td> "
-Response.Write "<td contenteditable ></td>  "
-
-Response.Write "<td style=""display:none;"">" & objRS.Fields("checkpoint_id") & "</td> </tr>"
-
+	Response.Write "<div id=""PgData"" chkType=""" & objRS.Fields("chk_Type") & """ account=""" & objRS.Fields("account") &  """> </div>"
+	Response.Write "<tr> <td rowspan=""" & totalCheckPoints & """  >"  & objRS.Fields("set_name")   &  "</td> "
+	Response.Write "<td rowspan="""      & totalCheckPoints & """ >"  & objRS.Fields("sub_cat_name") &  "</td>  "
+	Response.Write " <td >" & objRS.Fields("checkpoint") &  "</td> "
+	Response.Write "<td contenteditable ></td> "
+	Response.Write "<td contenteditable ></td> "
+	Response.Write "<td contenteditable ></td>  "
+	Response.Write "<td style=""display:none;"">" & objRS.Fields("checkpoint_id") & "</td> </tr>"
 End If
 
 IF checkPointIndex>1 Then
@@ -229,17 +228,14 @@ function submitProcedures(){
 	  issueList: generateIssueList(issuesTracked),
 	  procedureList: procedureListValues
 	}
-	/*
-	for (var name in parameters) {
-	  if (parameters.hasOwnProperty(name)) {
-		console.log('this is fog (' + name + ') for sure. Value: ' + parameters[name]);
-	  }
-	  else {
-		console.log(name); // toString or something else
-	  }
-	}
-	*/
-	post("saveInDB.asp",parameters,"post","N","selfEvaNavigation.asp?navType=selfEva")
+	var singleCatSheetPgData 	= document.getElementById("PgData");
+	var chkType  				= singleCatSheetPgData.getAttribute('chkType');
+	var account  				= singleCatSheetPgData.getAttribute('account');
+	var params					= "reqType=" + "selfEva" + "&" +
+								  "chkType=" + chkType + "&" +
+								  "account=" + account;
+	var selfNavLink				= "selfEvaNavigation.asp?" + params;
+	post("saveInDB.asp",parameters,"post","N",selfNavLink);
 }
 function buttonBack(){
 	var table = document.getElementById('selfEvaSheet');
@@ -251,8 +247,7 @@ function buttonBack(){
 	  issueList: generateIssueList(issuesTracked),
 	  procedureList: procedureListValues
 	}
-	post(document.referrer,parameters,"post","Y","http://localhost:88/selfEvaNavigation.asp?navType=selfEva")
-
+	post(document.referrer,parameters,"post","Y")
 }
 </script>
 

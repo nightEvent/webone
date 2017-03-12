@@ -16,6 +16,7 @@ session.codepage=65001
 		}
 		table, td, th {
 			border: 1px solid black;
+			text-align: center
 		}
         
 		table {
@@ -58,8 +59,12 @@ end if
 
 'preparing search result buttons
 Dim topHead, secondH, sqlCount,count, buttonSubmit,buttonBack
-topHeader=" <tr> <td colspan=""7""> 当前已添加在分类的项目  </td> </tr> "
-secondH=" <tr> <th>系列</th> <th>分类</th> <th>详细风险点</th>  <th>合规要求</th>  <th>排查方法</th> <th style=""display:none;"" > 排查过程</th>  <th>勾选要删除的项</th>  </tr> "
+topHeader=" <tr> <td colspan=""7""> 当前已添加的项目  </td> </tr> "
+if checkPointType <> "Q" then
+	secondH=" <tr> <th>系列</th> <th>分类</th> <th>详细风险点</th>  <th>合规要求</th>  <th>排查方法</th> <th style=""display:none;"" > 排查过程</th>  <th>勾选要删除的项</th>  </tr> "
+else 
+	secondH=" <tr> <th>系列</th> <th>分类</th> <th>详细风险点</th>  <th>合规要求</th>  <th style=""display:none;"" >排查方法</th> <th style=""display:none;"" > 排查过程</th>  <th>勾选要删除的项</th>  </tr> "
+end if
 sqlCount="select count(1) as checkPointCnt from webone.checkpoints where sub_cat_id = " & subCat & " ;"
 Set objRS = objConn.Execute(sqlCount)
 while Not objRs.EOF
@@ -79,7 +84,11 @@ IF checkPointsCount=1 Then
 	Response.Write "<tr > <td rowspan=""" & count & """  >"  & objRS.Fields("set_name")      &  "</td> "
 	Response.Write "<td rowspan="""      & count & """  >"  & objRS.Fields("sub_cat_name") &  "</td>  "
 	Response.Write "  <td>" &  " <a href=""#"" onmouseenter=""checkPointClicked(" & objRS.Fields("checkpoint_id") & ")"" >"  &  objRS.Fields("checkpoint") &  "</a> "  &   "</td>  <td   > " & objRS.Fields("fulfill_standard") & "</td> "
-	Response.Write "<td rowspan=""" & count & """ >"  & objRS.Fields("audit_rule") & "</td>"
+	if checkPointType <> "Q" then
+		Response.Write "<td rowspan=""" & count & """ >"  & objRS.Fields("audit_rule") & "</td>"
+	else 
+		Response.Write "<td  rowspan=""" & count & """  style=""display:none;""> 排查方法 </td>"
+	end if
 	Response.Write "<td  style=""display:none;""> 排查过程 </td>"
 	Response.Write "<td >  <input type=""checkbox""  id=""" & checkPointsCount &  "000"" name=""vehicle"" value=""Car"" unchecked >  </td>   <td style=""display:none;"">" & objRS.Fields("sub_cat_id") & "</td> <td style=""display:none;"">" & objRS.Fields("checkpoint_id") & "</td> </tr>"
 End If
@@ -262,7 +271,7 @@ function startChecking(){
 	var audit_procedures = createArray(checkPointsCount, 4 ); 
 	getCellValues(audit_procedures,table);
 	//printArrays(audit_procedures);
-	var parameters = "checkPointIdList=" + getInlist(audit_procedures);
+	var parameters = "checkPointIdList=" + getInlist(audit_procedures) + "&deleteType=C";
 	console.log(parameters)
 	var http = new XMLHttpRequest();
 	http.open("POST", "deleteTheAdded.asp", true);
@@ -271,7 +280,6 @@ function startChecking(){
 	if(http.readyState == 4 && http.status == 200){
 		   alert(http.responseText);
 		   location.reload(true);
-		   //navigates(document.referrer)
 		 }
 	   }
 	http.send(parameters)

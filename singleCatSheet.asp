@@ -108,45 +108,90 @@ startCheck="<button onclick=""startChecking()""> 排查开始 </button>"
 buttonSubmit="<button onclick=""startChecking()""> 进入问题追踪页面 </button>"
 buttonBack="<button onclick=""buttonBack()""> 返回系列 </button>"
 Response.Write "<table id=""selfEvaSheet"" >"
-Response.Write topHeader
-Response.Write secondH
+
 Dim checkPointsCount
 checkPointsCount=1
 Set objRS = objConn.Execute(queryStr)
 While Not objRS.EOF
-IF checkPointsCount=1 Then
-	Response.Write "<div id=""singleCatSheetPgData"" chkType=""" & objRS.Fields("chk_Type") & """ account=""" & objRS.Fields("account") &  """> </div>"
-	Response.Write "<tr > <td rowspan=""" & count & """  >"  & objRS.Fields("set_name")      &  "</td> "
-	Response.Write "<td rowspan="""      & count & """  >"  & objRS.Fields("sub_cat_name") &  "</td>  "
+	IF checkPointsCount=1 Then
+		Response.Write topHeader
+		Response.Write secondH
+		Response.Write "<div id=""singleCatSheetPgData"" chkType=""" & objRS.Fields("chk_Type") & """ account=""" & objRS.Fields("account") &  """> </div>"
+		Response.Write "<tr > <td rowspan=""" & count & """  >"  & objRS.Fields("set_name")      &  "</td> "
+		Response.Write "<td rowspan="""      & count & """  >"  & objRS.Fields("sub_cat_name") &  "</td>  "
 
-	Response.Write "  <td   >" &  " <a href=""#"" onmouseenter=""checkPointClicked(" & objRS.Fields("checkpoint_id") & ")"" >"  &  objRS.Fields("checkpoint") &  "</a> "  &   "</td>  <td   > " & objRS.Fields("fulfill_standard") & "</td> "
+		Response.Write "  <td   >" &  " <a href=""#"" onmouseenter=""checkPointClicked(" & objRS.Fields("checkpoint_id") & ")"" >"  &  objRS.Fields("checkpoint") &  "</a> "  &   "</td>  <td   > " & objRS.Fields("fulfill_standard") & "</td> "
 
-	Response.Write "<td rowspan=""" & count & """ >"  & objRS.Fields("audit_rule") & "</td>"
-	IF loadInputHistory = "Y" THEN
-		Response.Write "<td contenteditable            onclick=""checkPointClicked(" & objRS.Fields("checkpoint_id") & ")""         >" & arr(checkPointsCount-1) & "</td> " 'when row number is 2, read from cell NUMBER 5 through 8, when cell number is 6 , it's a checkbox
-		Response.Write "<td >  <input type=""checkbox""  id=""" & checkPointsCount &  "000"" name=""vehicle"" value=""Car"" " & arrCB(checkPointsCount-1) & " >  </td>   <td style=""display:none;"">" & objRS.Fields("sub_cat_id") & "</td> <td style=""display:none;"">" & objRS.Fields("checkpoint_id") & "</td> </tr>"
-												'arrCB(checkPointsCount-1)
-	ELSE 
-		Response.Write "<td contenteditable             onclick=""checkPointClicked(" & objRS.Fields("checkpoint_id") & ")""                     ></td> " 'when row number is 2, read from cell NUMBER 5 through 8, when cell number is 6 , it's a checkbox
-		Response.Write "<td >  <input type=""checkbox""  id=""" & checkPointsCount &  "000"" name=""vehicle"" value=""Car"" unchecked >  </td>   <td style=""display:none;"">" & objRS.Fields("sub_cat_id") & "</td> <td style=""display:none;"">" & objRS.Fields("checkpoint_id") & "</td> </tr>"
-												'arrCB(checkPointsCount-1)
-	END IF
+		Response.Write "<td rowspan=""" & count & """ >"  & objRS.Fields("audit_rule") & "</td>"
+		IF loadInputHistory = "Y" THEN
+			Response.Write "<td contenteditable            onclick=""checkPointClicked(" & objRS.Fields("checkpoint_id") & ")""         >" & arr(checkPointsCount-1) & "</td> " 'when row number is 2, read from cell NUMBER 5 through 8, when cell number is 6 , it's a checkbox
+			Response.Write "<td >  <input type=""checkbox""  id=""" & checkPointsCount &  "000"" name=""vehicle"" value=""Car"" " & arrCB(checkPointsCount-1) & " >  </td>   <td style=""display:none;"">" & objRS.Fields("sub_cat_id") & "</td> <td style=""display:none;"">" & objRS.Fields("checkpoint_id") & "</td> </tr>"
+													'arrCB(checkPointsCount-1)
+		ELSE 
+			Response.Write "<td contenteditable             onclick=""checkPointClicked(" & objRS.Fields("checkpoint_id") & ")""                     ></td> " 'when row number is 2, read from cell NUMBER 5 through 8, when cell number is 6 , it's a checkbox
+			Response.Write "<td >  <input type=""checkbox""  id=""" & checkPointsCount &  "000"" name=""vehicle"" value=""Car"" unchecked >  </td>   <td style=""display:none;"">" & objRS.Fields("sub_cat_id") & "</td> <td style=""display:none;"">" & objRS.Fields("checkpoint_id") & "</td> </tr>"
+													'arrCB(checkPointsCount-1)
+		END IF
 
-End If
+	End If
 
-IF checkPointsCount>1 Then 'starting from number 3, read from cell number 2 through 5 and when cell number is 3 it's a checkbox
-	Response.Write "<tr> <td   >" &  " <a href=""#"" onmouseenter=""checkPointClicked(" & objRS.Fields("checkpoint_id") & ")"" >"  &  objRS.Fields("checkpoint") &  "</a> "  &  "</td>  <td   > " & objRS.Fields("fulfill_standard") & "</td> "
-	IF loadInputHistory = "Y" THEN 
-		Response.Write "<td  contenteditable    onclick=""checkPointClicked(" & objRS.Fields("checkpoint_id") & ")""         >" &  arr(checkPointsCount-1) & "</td> " 
-		Response.Write "<td >  <input type=""checkbox""  id=""" & checkPointsCount &  "000"" name=""vehicle"" value=""Car"" " & arrCB(checkPointsCount-1) & " >  </td>   <td style=""display:none;"">" & objRS.Fields("sub_cat_id") & "</td> <td style=""display:none;"">" & objRS.Fields("checkpoint_id") & "</td> </tr>"
-	ELSE 
-		Response.Write "<td  contenteditable      onclick=""checkPointClicked(" & objRS.Fields("checkpoint_id") & ")""           ></td> " 
-		Response.Write "<td >  <input type=""checkbox""  id=""" & checkPointsCount &  "000"" name=""vehicle"" value=""Car"" unchecked >  </td>   <td style=""display:none;"">" & objRS.Fields("sub_cat_id") & "</td> <td style=""display:none;"">" & objRS.Fields("checkpoint_id") & "</td> </tr>"
-    END IF	
-End If
-checkPointsCount=checkPointsCount+1
-objRS.MoveNext
+	IF checkPointsCount>1 Then 'starting from number 3, read from cell number 2 through 5 and when cell number is 3 it's a checkbox
+		Response.Write "<tr> <td   >" &  " <a href=""#"" onmouseenter=""checkPointClicked(" & objRS.Fields("checkpoint_id") & ")"" >"  &  objRS.Fields("checkpoint") &  "</a> "  &  "</td>  <td   > " & objRS.Fields("fulfill_standard") & "</td> "
+		IF loadInputHistory = "Y" THEN 
+			Response.Write "<td  contenteditable    onclick=""checkPointClicked(" & objRS.Fields("checkpoint_id") & ")""         >" &  arr(checkPointsCount-1) & "</td> " 
+			Response.Write "<td >  <input type=""checkbox""  id=""" & checkPointsCount &  "000"" name=""vehicle"" value=""Car"" " & arrCB(checkPointsCount-1) & " >  </td>   <td style=""display:none;"">" & objRS.Fields("sub_cat_id") & "</td> <td style=""display:none;"">" & objRS.Fields("checkpoint_id") & "</td> </tr>"
+		ELSE 
+			Response.Write "<td  contenteditable      onclick=""checkPointClicked(" & objRS.Fields("checkpoint_id") & ")""           ></td> " 
+			Response.Write "<td >  <input type=""checkbox""  id=""" & checkPointsCount &  "000"" name=""vehicle"" value=""Car"" unchecked >  </td>   <td style=""display:none;"">" & objRS.Fields("sub_cat_id") & "</td> <td style=""display:none;"">" & objRS.Fields("checkpoint_id") & "</td> </tr>"
+		END IF	
+	End If
+	checkPointsCount=checkPointsCount+1
+	objRS.MoveNext
 Wend
+
+
+if checkPointsCount = 1 then 'meaning type is Q ,need to query view selfEvaQ
+	queryStr="SELECT sub_cat_id,chk_Type, set_name , account, sub_cat_name , checkpoint , fulfill_standard,checkpoint_id FROM webone.selfEvaQ where 1= 1  "
+	queryStr=queryStr & " AND sub_cat_id  = " & "'" & subCatId & "'"  & " order by  checkpoint_id ASC ;"
+	secondH=" <tr> <th>系列</th> <th>分类</th> <th>详细风险点</th>  <th>合规要求</th>  <th style=""display:none;"">排查方法</th>  <th>排查经过</th> <th>发现问题</th>  </tr> "
+	Set objRS = objConn.Execute(queryStr)
+	While Not objRS.EOF
+	IF checkPointsCount=1 Then
+		Response.Write topHeader
+		Response.Write secondH
+		Response.Write "<div id=""singleCatSheetPgData"" chkType=""" & objRS.Fields("chk_Type") & """ account=""" & objRS.Fields("account") &  """> </div>"
+		Response.Write "<tr > <td rowspan=""" & count & """  >"  & objRS.Fields("set_name")      &  "</td> "
+		Response.Write "<td rowspan="""      & count & """  >"  & objRS.Fields("sub_cat_name") &  "</td>  "
+		Response.Write "  <td   >" &  " <a href=""#"" onmouseenter=""checkPointClicked(" & objRS.Fields("checkpoint_id") & ")"" >"  &  objRS.Fields("checkpoint") &  "</a> "  &   "</td>  <td   > " & objRS.Fields("fulfill_standard") & "</td> "
+		Response.Write "<td rowspan=""" & count & """  style=""display:none;"" >排查方法</td>"
+		IF loadInputHistory = "Y" THEN
+			Response.Write "<td contenteditable onclick=""checkPointClicked(" & objRS.Fields("checkpoint_id") & ")"" >" & arr(checkPointsCount-1) & "</td> " 'when row number is 2, read from cell NUMBER 5 through 8, when cell number is 6 , it's a checkbox
+			Response.Write "<td >  <input type=""checkbox""  id=""" & checkPointsCount &  "000"" name=""vehicle"" value=""Car"" " & arrCB(checkPointsCount-1) & " >  </td>   <td style=""display:none;"">" & objRS.Fields("sub_cat_id") & "</td> <td style=""display:none;"">" & objRS.Fields("checkpoint_id") & "</td> </tr>"
+													'arrCB(checkPointsCount-1)
+		ELSE 
+			Response.Write "<td contenteditable onclick=""checkPointClicked(" & objRS.Fields("checkpoint_id") & ")""  ></td> " 'when row number is 2, read from cell NUMBER 5 through 8, when cell number is 6 , it's a checkbox
+			Response.Write "<td >  <input type=""checkbox""  id=""" & checkPointsCount &  "000"" name=""vehicle"" value=""Car"" unchecked >  </td>   <td style=""display:none;"">" & objRS.Fields("sub_cat_id") & "</td> <td style=""display:none;"">" & objRS.Fields("checkpoint_id") & "</td> </tr>"
+													'arrCB(checkPointsCount-1)
+		END IF
+
+	End If
+
+	IF checkPointsCount>1 Then 'starting from number 3, read from cell number 2 through 5 and when cell number is 3 it's a checkbox
+		Response.Write "<tr> <td   >" &  " <a href=""#"" onmouseenter=""checkPointClicked(" & objRS.Fields("checkpoint_id") & ")"" >"  &  objRS.Fields("checkpoint") &  "</a> "  &  "</td>  <td   > " & objRS.Fields("fulfill_standard") & "</td> "
+		IF loadInputHistory = "Y" THEN 
+			Response.Write "<td  contenteditable    onclick=""checkPointClicked(" & objRS.Fields("checkpoint_id") & ")""         >" &  arr(checkPointsCount-1) & "</td> " 
+			Response.Write "<td >  <input type=""checkbox""  id=""" & checkPointsCount &  "000"" name=""vehicle"" value=""Car"" " & arrCB(checkPointsCount-1) & " >  </td>   <td style=""display:none;"">" & objRS.Fields("sub_cat_id") & "</td> <td style=""display:none;"">" & objRS.Fields("checkpoint_id") & "</td> </tr>"
+		ELSE 
+			Response.Write "<td  contenteditable      onclick=""checkPointClicked(" & objRS.Fields("checkpoint_id") & ")""           ></td> " 
+			Response.Write "<td >  <input type=""checkbox""  id=""" & checkPointsCount &  "000"" name=""vehicle"" value=""Car"" unchecked >  </td>   <td style=""display:none;"">" & objRS.Fields("sub_cat_id") & "</td> <td style=""display:none;"">" & objRS.Fields("checkpoint_id") & "</td> </tr>"
+		END IF	
+	End If
+	checkPointsCount=checkPointsCount+1
+	objRS.MoveNext
+	Wend
+end if
+
+
 Response.Write "</table>"
 Response.Write "<br>"
 'Response.Write startCheck 

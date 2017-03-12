@@ -11,9 +11,9 @@ if deleteType="C" then
 elseif deleteType="S" then
 	subCatList		= Request.Form("subCatList")
 	deleteStr="DELETE FROM webone.sub_category WHERE sub_cat_id in (" & subCatList & ");"
-elseif deleteType="L" then											'NOT YET DONE
-	subCatList		= Request.Form("subCatList")                    'NOT YET DONE
-	checkPointsList = Request.Form("checkPointIdList")				'NOT YET DONE
+elseif deleteType="L" then											'NOT YET DONE reserved for linked rule  
+	subCatList		= Request.Form("subCatList")                    'NOT YET DONE reserved for linked rule 
+	checkPointsList = Request.Form("checkPointIdList")				'NOT YET DONE reserved for linked rule 
 	deleteStr="DELETE FROM webone.checkpoints WHERE checkpoint_id in (" & checkPointsList & ");"  'NOT YET DONE
 end if
 sConnection = "DRIVER={MySQL ODBC 5.3 ANSI Driver}; SERVER=localhost; DATABASE=webone; UID=weboneuser;PASSWORD=weboneuser;PTION=3" 
