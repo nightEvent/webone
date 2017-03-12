@@ -193,12 +193,15 @@ end if
 
 
 Response.Write "</table>"
+
+if checkPointsCount = 1 then   'if STILL equel to 1, then no checkpoint for the currernt subCatId
+response.write "<p style=""color:red;"">未查询到相应的风险点！</p>"
+end if
 Response.Write "<br>"
-'Response.Write startCheck 
 Response.Write buttonBack
 if checkPointsCount<>1 then   ' meaning there is zero checkpoint for this subCat, so no meaning to provide buttonSubmit, 
 Response.Write buttonSubmit   ' more importantly selfEvaNavigation page link parameter chk_type is retrieved from cusor record
-end if						  ' when navigate back from issueTrackerBuilder.
+end if						  ' when navigate back from issueTrackerBuilder. Last but not the least, prevent potential bugs by submitting nothing
 Response.Write "<input type=""hidden"" name=""orderNumber"" id=""checkPointsCount"" value=""" & ( checkPointsCount - 1 ) & """ />"
 Response.Write "<br>"
 Response.Write "<p id=""linkedRules""></p>"
