@@ -117,14 +117,14 @@ Set objRS = Nothing
 objConn.Close
 Set objConn = Nothing
 Response.Write "</br>"
-if reqType <> "selfEva" and account <> "" then  'setName <> "" is to avoid session expire
-Response.Write "<a class=""hoverEff""  href=""downloadExport.asp"">生成表格并下载</a>"
-Response.Write "</br>"
-Response.Write "<a class=""hoverEff"" href=""docReportBuilder.asp"">生成报告并下载</a>"
-Response.Write "</br>"
-Response.Write "<a class=""hoverEff""  href=""#"" onclick=""buildBarChart()"">2016违规比例</a>"
-Response.Write "<a class=""hoverEff""  href=""createMultipleSheetsTest.asp"" >多表Excel下载</a>"
-end if
+'if reqType <> "selfEva" and account <> "" then  'setName <> "" is to avoid session expire
+'Response.Write "<a class=""hoverEff""  href=""downloadExport.asp"">生成表格并下载</a>"
+'Response.Write "</br>"
+'Response.Write "<a class=""hoverEff"" href=""docReportBuilder.asp"">生成报告并下载</a>"
+'Response.Write "</br>"
+'Response.Write "<a class=""hoverEff""  href=""#"" onclick=""buildBarChart()"">2016违规比例</a>"
+'Response.Write "<a class=""hoverEff""  href=""createMultipleSheetsTest.asp"" >多表Excel下载</a>"
+'end if
 %>
 
 <h4 id=title></h4>

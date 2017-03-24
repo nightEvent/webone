@@ -158,7 +158,7 @@ if checkPointsCount = 1 then 'meaning type is Q ,need to query view selfEvaQ
 	IF checkPointsCount=1 Then
 		Response.Write topHeader
 		Response.Write secondH
-		Response.Write "<div id=""singleCatSheetPgData"" chkType=""" & objRS.Fields("chk_Type") & """ account=""" & objRS.Fields("account") &  """> </div>"
+		Response.Write "<div id=""singleCatSheetPgData"" chkType=""" & objRS.Fields("chk_Type") & """ account=""" & objRS.Fields("account") & """> </div>"
 		Response.Write "<tr > <td rowspan=""" & count & """  >"  & objRS.Fields("set_name")      &  "</td> "
 		Response.Write "<td rowspan="""      & count & """  >"  & objRS.Fields("sub_cat_name") &  "</td>  "
 		Response.Write "  <td   >" &  " <a href=""#"" onmouseenter=""checkPointClicked(" & objRS.Fields("checkpoint_id") & ")"" >"  &  objRS.Fields("checkpoint") &  "</a> "  &   "</td>  <td   > " & objRS.Fields("fulfill_standard") & "</td> "

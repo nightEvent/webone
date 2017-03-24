@@ -6,7 +6,7 @@ Function Lpad (sValue, sPadchar, iLength)
   Lpad = string(iLength - Len(sValue),sPadchar) & sValue
 End Function
 
-Function KeyGenerator(baseTime,interval)
+Function KeyGenerator(baseTime,interval,salt)
 'Response.Write("baseTime before intervalled: " & baseTime & ". </br> ")
 baseTime=DateAdd("s",interval,baseTime)
 'Response.Write("baseTime after intervalled: " & baseTime & ". </br> ")
@@ -23,13 +23,15 @@ mmm=Lpad(mmm,"0",2)
 sss=Second(baseTime)
 sss=Lpad(sss,"0",2)
 timeString=yyy & mon & ddd & hhh & mmm & sss
+timeString=(timeString*1000 + salt)
 KeyGenerator=timeString
 End Function
 
 'generate insert procedures statement starts
-Dim procedureList,issueList,recordsArr(),keyIdArr(),ind,procedureExpired,currentTime,inList,currentTimeDelt,keyCurrent
+Dim procedureList,issueList,recordsArr(),keyIdArr(),ind,procedureExpired,currentTime,inList,currentTimeDelt,keyCurrent,setId
 procedureList=Request.Form("procedureList")
 issueList=Request.Form("issueList")
+setId=Request.Form("setId")
 If procedureList = "" or issueList = "" Then
    procedureExpired="N"
 else
@@ -61,7 +63,7 @@ if procedureExpired = "Y" Then
 				inList = inList & ","  & x 
 			end if
 			currentTimeDelt=currentTime
-			keyCurrent = KeyGenerator(currentTimeDelt,(recordInd - recordCnt))
+			keyCurrent = KeyGenerator(currentTimeDelt,(recordInd - recordCnt),setId)
 		    recordsArr(recordInd) = keyCurrent & "," & inList
 			keyIdArr(recordInd,0) = x
 			keyIdArr(recordInd,1) = keyCurrent

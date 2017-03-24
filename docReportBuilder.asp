@@ -76,8 +76,16 @@ Response.write("<body lang=UTF-8 style='tab-interval:.5in'>" 	& _
 "及合规部（监察室）。 <br>"   							  & _
 " &nbsp 二、自查工作发现问题及整改情况 <br>" )
 '################# middle to feed selfevaluations
-Dim sConnection, objConn , objRS ,queryStr
-queryStr="SELECT set_name,sub_cat_name,issue,corrections,result FROM webone.reporting where 1= 1 order by set_id asc  ;"
+Dim sConnection, objConn , objRS ,queryStr,chkType,pastNdays,dueDays
+chkType=Request.querystring("chkType")
+pastNdays=Request.querystring("pastNdays")
+pastNdays= -1 * pastNdays
+dueDays=90
+
+queryStr="SELECT set_name,sub_cat_name,issue,corrections,result,TIMESTAMPADD(DAY," & dueDays & " ,creation_time) as DueTime FROM webone.reporting where 1= 1 " & _
+         " AND chk_Type = '" &  chkType &  "'" & _
+		 " AND creation_time  >  TIMESTAMPADD(DAY, " & pastNdays  &  ",  Now() ) " & _
+		 " order by set_id ASC; "
 sConnection = "DRIVER={MySQL ODBC 5.3 ANSI Driver}; SERVER=localhost; DATABASE=webone; UID=weboneuser;PASSWORD=weboneuser;PTION=3" 
 Set objConn = Server.CreateObject("ADODB.Connection") 
 objConn.Open(sConnection) 
@@ -129,14 +137,14 @@ if objRS.Fields("set_name") = previousSet then
 	if objRS.Fields("sub_cat_name") = previousSubCat then
 	   Response.Write "(" & issueIndex & ")" & "问题描述：" & objRS.Fields("issue") & " <br> "
 	   Response.Write " &nbsp  &nbsp 整改措施：" & objRS.Fields("corrections") & " <br> "
-	   Response.Write " &nbsp  &nbsp 预计完成时间：" & objRS.Fields("result") & " <br> "
+	   Response.Write " &nbsp  &nbsp 预计完成时间：" & objRS.Fields("DueTime") & " <br> "
 	   issueIndex=issueIndex+1
 	else
 	   issueIndex=1
 	   Response.Write " &nbsp  &nbsp " & subCatIndex & "." & objRS.Fields("sub_cat_name") & " <br> "
 	   Response.Write "(" & issueIndex & ")" & "问题描述：" & objRS.Fields("issue") & " <br> " 
 	   Response.Write " &nbsp  &nbsp 整改措施：" & objRS.Fields("corrections") & " <br> "
-	   Response.Write " &nbsp  &nbsp 预计完成时间：" & objRS.Fields("result") & " <br> "
+	   Response.Write " &nbsp  &nbsp 预计完成时间：" & objRS.Fields("DueTime") & " <br> "
 	   subSetIndex=subCatIndex + 1
 	   issueIndex=issueIndex + 1
 	   previousSubCat=objRS.Fields("sub_cat_name")
@@ -149,7 +157,7 @@ else
 	Response.Write subCatIndex & "." & objRS.Fields("sub_cat_name") & " <br>"
 	Response.Write "(" & issueIndex & ")" & "问题描述：" & objRS.Fields("issue") & " <br> " 
 	Response.Write " &nbsp  &nbsp 整改措施：" & objRS.Fields("corrections") & " <br> "
-	Response.Write " &nbsp  &nbsp 预计完成时间：" & objRS.Fields("result") & " <br> "
+	Response.Write " &nbsp  &nbsp 预计完成时间：" & objRS.Fields("DueTime") & " <br> "
 	previousSet=objRS.Fields("set_name")
 	previousSubCat=objRS.Fields("sub_cat_name")
     subCatIndex=subCatIndex + 1

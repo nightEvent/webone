@@ -63,11 +63,11 @@ button {
 <%
 response.expires=-1
 Dim sConnection, objConn , objRS ,headerRow, queryStr ,totalCheckPoints
-subCatId = Request.querystring("subCatId")
+subCatId = Request.querystring("subCatId") 
 
 sqlGetCount="select count(1) totalRecord from webone.reporting where sub_cat_id  = " & "'" & subCatId & "' ;"
-queryStr="SELECT set_name , sub_cat_name , checkpoint , issue,corrections, result, audit_id,sub_cat_id,checkpoint_id FROM webone.reporting where 1= 1  "
-queryStr=queryStr & " AND sub_cat_id  = " & "'" & subCatId & "'"  & " order by  audit_id ASC ;"
+queryStr="SELECT set_name , sub_cat_name , checkpoint , issue,corrections, result, creation_time,sub_cat_id,checkpoint_id FROM webone.reporting where 1= 1  "
+queryStr=queryStr & " AND sub_cat_id  = " & "'" & subCatId & "'"  & " order by  creation_time ASC ;"
 
 sConnection = "DRIVER={MySQL ODBC 5.3 ANSI Driver}; SERVER=localhost; DATABASE=webone; UID=weboneuser;PASSWORD=weboneuser;PTION=3" 
 
@@ -99,7 +99,7 @@ Response.Write "  <td   >" &  " <a href=""#"" onclick=""checkPointClicked(" & ob
 Response.Write "<td >" & objRS.Fields("issue") &  "</td> "
 Response.Write "<td >" & objRS.Fields("corrections") &  "</td> "
 Response.Write "<td >" & objRS.Fields("result") &  "</td> "
-Response.Write "<td >" & objRS.Fields("audit_id") &  "</td> </tr> "
+Response.Write "<td >" & objRS.Fields("creation_time") &  "</td> </tr> "
 End If
 
 IF checkPointIndex>1 Then
@@ -107,7 +107,7 @@ Response.Write "<tr > <td> <a href=""#"" onclick=""checkPointClicked(" & objRS.F
 Response.Write "<td >" & objRS.Fields("issue") & "</td> "
 Response.Write "<td >" & objRS.Fields("corrections") &  "</td> "
 Response.Write "<td >" & objRS.Fields("result") &  "</td>  "
-Response.Write "<td >" & objRS.Fields("audit_id") &  "</td>  </tr>"
+Response.Write "<td >" & objRS.Fields("creation_time") &  "</td>  </tr>"
 End If
 checkPointIndex=checkPointIndex+1
 objRS.MoveNext

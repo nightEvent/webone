@@ -55,7 +55,7 @@ end if
 
 totalCheckPoints=(len(checkPointsList) - len(replace(checkPointsList, ",", "")) + 1)
 
-queryStr="SELECT sub_cat_id,chk_Type, set_name , account, sub_cat_name , checkpoint , fulfill_standard, sub_cat_name,checkpoint_id FROM webone.selfEvaQ where 1= 1  "
+queryStr="SELECT sub_cat_id,chk_Type, set_id,set_name , account, sub_cat_name , checkpoint , fulfill_standard, sub_cat_name,checkpoint_id FROM webone.selfEvaQ where 1= 1  "
 queryStr=queryStr & " AND checkpoint_id in " & "(" & checkPointsList & ")"  & " order by  checkpoint_id ASC ;"
 
 sConnection = "DRIVER={MySQL ODBC 5.3 ANSI Driver}; SERVER=localhost; DATABASE=webone; UID=weboneuser;PASSWORD=weboneuser;PTION=3" 
@@ -80,7 +80,7 @@ Dim checkPointIndex
 checkPointIndex=1
 While Not objRS.EOF
 IF checkPointIndex=1 Then
-	Response.Write "<div id=""PgData"" chkType=""" & objRS.Fields("chk_Type") & """ account=""" & objRS.Fields("account") &  """> </div>"
+	Response.Write "<div id=""PgData"" chkType=""" & objRS.Fields("chk_Type") & """ account=""" & objRS.Fields("account") & """ setId=""" & objRS.Fields("set_id") & """> </div>"
 	Response.Write "<tr> <td rowspan=""" & totalCheckPoints & """  >"  & objRS.Fields("set_name")   &  "</td> "
 	Response.Write "<td rowspan="""      & totalCheckPoints & """ >"  & objRS.Fields("sub_cat_name") &  "</td>  "
 	Response.Write " <td >" & objRS.Fields("checkpoint") &  "</td> "
@@ -224,13 +224,15 @@ function submitProcedures(){
 	var issuesTracked = createArray(checkPointIndex,4); 
 	getCellValues(issuesTracked,table);
 	var procedureListValues = document.getElementById('procedureListValues').innerHTML;
-	var parameters = {
-	  issueList: generateIssueList(issuesTracked),
-	  procedureList: procedureListValues
-	}
 	var singleCatSheetPgData 	= document.getElementById("PgData");
 	var chkType  				= singleCatSheetPgData.getAttribute('chkType');
 	var account  				= singleCatSheetPgData.getAttribute('account');
+	var setID 					= singleCatSheetPgData.getAttribute('setId');
+	var parameters = {
+	  issueList: generateIssueList(issuesTracked),
+	  procedureList: procedureListValues,
+	  setId: setID
+	}
 	var params					= "reqType=" + "selfEva" + "&" +
 								  "chkType=" + chkType + "&" +
 								  "account=" + account;

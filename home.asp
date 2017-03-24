@@ -1,4 +1,13 @@
-﻿<!DOCTYPE html>
+﻿<%@LANGUAGE="VBSCRIPT" CODEPAGE="65001" LCID=2052 %>
+<%
+'Session.LCID     = 1033 'en-US
+'response.write("<p>")
+'response.write("LCID is now: " & Session.LCID & "<br>")
+'response.write("Date format is: " & date() & "<br>")
+'response.write("Currency format is: " & FormatCurrency(350))
+'response.write("</p>")
+%>
+<!DOCTYPE html>
 <html>
 <head>
 <title>太平人寿风险排查系统</title>
@@ -317,6 +326,22 @@ hr {
     border-style: inset;
     border-width: 1px;
 }
+
+
+
+a.hoverEff:hover,a.hoverEff.active { 
+    //text-decoration: underline;
+	font-size: 150%;
+	//color: #b3ffb3;
+ }
+ 
+.colorBelt {
+    width: 100%;
+    padding: 50px 0;
+    text-align: center;
+    background-color: lightblue;
+    margin-top:20px;
+}
 </style>
 
 
@@ -428,58 +453,87 @@ end if
     </div>
   </li>
   <li class="dropdown">
-    <a href="#" class="dropbtn">报告</a>
+    <a href="#" class="dropbtn">排查浏览</a>
     <div class="dropdown-content">
-		<a href="#" onclick=checkPointClicked("report","Z") >自查报告</a>
-		<a href="#" onclick=checkPointClicked("report","Q") >全面排查报告</a>
-		<a href="#" onclick=checkPointClicked("report","L") >临时排查报告</a>
+		<a href="#" onclick=checkPointClicked("report","Z") >自查浏览</a>
+		<a href="#" onclick=checkPointClicked("report","Q") >全面排查浏览</a>
+		<a href="#" onclick=checkPointClicked("report","L") >临时排查浏览</a>
     </div>
   </li>
   <li class="dropdown">
     <a href="#" class="dropbtn">系统管理</a>
     <div class="dropdown-content">
+	  <a class="hoverEff" href="docReportBuilder.asp?pastNdays=365&chkType=Z">自查报告下载</a>
 	  <a href="addCheckPoint.asp">添加风险点</a>
 	  <a href="addSubCat.asp">添加分类</a>
 	  <a href="addCheckPoint.asp">添加对应条文</a>
+	  <a href="#" onclick="historyDownload()">历史数据</a>
 	  <a href="passwordResetPg.asp">修改密码</a>
+    </div>
+  </li>
+  <li class="dropdown">
+    <a href="#" class="dropbtn">数据图表</a>
+    <div class="dropdown-content">
+	  <a href="#headerOne" onclick="showCharts()" >历年各部门整体排查情况对比柱状图-自查-全面排查-临时排查三个维度</a>
+	  <a href="#">历年各部门排查问题走势图-</a>
+	  <a href="#">历年各部门走势图</a>
     </div>
   </li>
 </ul>
 
 
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-<hr>
-<h3>2016年度各部门风险自查违规比例:</h3>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<h3 id="headerOne" style="display:none;">2016年度各部门风险自查违规比例:</h3>
 </br>
 <svg id="barChartSvg" width="960" height="500"></svg>
 </br>
 </br>
-<h3>公司历年自查情况走势:</h3>
+<h3 id="headerTwo" style="display:none;">公司历年自查情况走势:</h3>
 </br>
 <svg id="lineChart" width="1300" height="500"></svg>
 <script src="lib/d3/d3.js"></script>
 <!--bar chart -->
 <script>
+function historyDownload(){
+    var pastNdays = prompt("想要下载过去多少天的数据？输入的必须是某个数字,默认是10天", "10");
+    if (pastNdays != null) {
+		navigates("downloadExport.asp?pastNdays=" + pastNdays);
+    }
+}
+
+function navigates(navigateTo){
+ window.location.href = navigateTo
+}
+
+function showCharts(){
+var headerOne 						= document.getElementById("headerOne");
+	headerOne.style.display 		= "block";
+var headerTwo 						= document.getElementById("headerTwo");
+	headerTwo.style.display 		= "block";
 var svgbarChart = d3.select("#barChartSvg"),
     margin = {top: 20, right: 20, bottom: 30, left: 40},
     width = +svgbarChart.attr("width") - margin.left - margin.right,
@@ -491,13 +545,13 @@ var xx = d3.scaleBand().rangeRound([0, width]).padding(0.25),
 var g = svgbarChart.append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-d3.tsv("violationRatio.tsv", function(d) {
+
+d3.tsv("frequencyBySet.asp", function(d) {
   d.frequency = +d.frequency;
   return d;
 }, function(error, data) {
   if (error) throw error;
-
-  xx.domain(data.map(function(d) { return d.letter; }));
+  xx.domain(data.map(function(d) { return d.set_name; }));
   y.domain([0, d3.max(data, function(d) { return d.frequency; })]);
 
   g.append("g")
@@ -519,12 +573,20 @@ d3.tsv("violationRatio.tsv", function(d) {
     .data(data)
     .enter().append("rect")
       .attr("class", "bar")
-      .attr("x", function(d) { return xx(d.letter); })
+      .attr("x", function(d) { return xx(d.set_name); })
       .attr("y", function(d) { return y(d.frequency); })
       .attr("width", xx.bandwidth())
       .attr("height", function(d) { return height - y(d.frequency); });
 });
 
+
+/*
+d3.json("frequencyBySet.asp", function(error, data) {
+    data.forEach(function(d) {
+        d.date = parseDate(d.date);
+        d.close = +d.close;
+    });
+*/
 <!--line chart -->
 var svgLineChart = d3.select("#lineChart"),
     margin = {top: 20, right: 20, bottom: 30, left: 50},
@@ -576,6 +638,8 @@ d3.tsv("trendLineBar.tsv", function(d) {
       .attr("d", line);
 });
 
+
+}
 </script>
 
 <div id="id01" class="modal">
